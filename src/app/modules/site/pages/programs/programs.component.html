@@ -1,0 +1,396 @@
+
+<!-- Hero Section -->
+<section class="programs-hero">
+  <div class="hero-background">
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">{{ pageData.hero.title }}</h1>
+      <p class="hero-subtitle">{{ pageData.hero.subtitle }}</p>
+
+      <!-- Quick Stats -->
+      <div class="hero-stats">
+        <div *ngFor="let stat of pageData.stats.items" class="stat-item">
+          <div class="stat-number">{{ stat.number }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Search and Filters Section -->
+<section class="filters-section">
+  <div class="container">
+    <div class="filters-container">
+
+      <!-- Search Bar -->
+      <div class="search-box">
+        <div class="search-icon"><i class="fas fa-magnifying-glass"></i></div> 
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Pesquisar programas..."
+          class="search-input">
+        <button class="search-btn" (click)="clearFilters()">Limpar</button>
+      </div>
+
+      <!-- Filters Row -->
+      <div class="filters-row">
+
+        <!-- Category Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Categoria</label>
+          <select [(ngModel)]="selectedCategory" class="filter-select">
+            <option *ngFor="let cat of categories" [value]="cat.value">
+               {{ cat.label }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Estado</label>
+          <select [(ngModel)]="selectedStatus" class="filter-select">
+            <option *ngFor="let status of statuses" [value]="status.value">
+               {{ status.label }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Sort Options -->
+        <div class="filter-group">
+          <label class="filter-label">Ordenar por</label>
+          <select [(ngModel)]="sortBy" class="filter-select">
+            <option *ngFor="let option of sortOptions" [value]="option.value">
+              {{ option.label }}
+            </option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Active Filters -->
+      <div class="active-filters" *ngIf="selectedCategory !== 'all' || selectedStatus !== 'all'">
+        <span class="filters-label">Filtros activos:</span>
+
+        <span *ngIf="selectedCategory !== 'all'" class="filter-tag">
+          {{ getCategoryInfo(selectedCategory).icon }} {{ getCategoryInfo(selectedCategory).label }}
+          <button (click)="selectedCategory = 'all'">×</button>
+        </span>
+
+
+
+        <span *ngIf="selectedStatus !== 'all'" class="filter-tag">
+  {{ getStatusInfo(selectedStatus).icon }} {{ getStatusInfo(selectedStatus).label }}
+  <button (click)="selectedStatus = 'all'">×</button>
+      </span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Programs Grid Section -->
+<section class="programs-grid-section">
+  <div class="container">
+
+    <!-- Results Header -->
+    <div class="results-header">
+      <h2 class="results-title">
+        {{ filteredPrograms.length }} Programa{{ filteredPrograms.length !== 1 ? 's' : '' }} Encontrado{{ filteredPrograms.length !== 1 ? 's' : '' }}
+      </h2>
+      <div class="results-actions">
+        <button class="export-btn">
+          <i class="fa-solid fa-chart-column"></i> Exportar Lista
+        </button>
+      </div>
+    </div>
+
+    <!-- Programs Grid -->
+    <div class="programs-grid">
+      <div
+        *ngFor="let program of filteredPrograms"
+        class="program-card"
+        [class.program-featured]="program.status === 'active'">
+
+        <!-- Program Header -->
+        <div class="program-header">
+          <div class="program-icon">
+            <i [class]="program.icon"></i>
+          </div>
+
+          <div class="program-badges">
+            <div class="status-badge" [class]="'status-' + getStatusInfo(program.status).color">
+              <i [class]="getStatusInfo(program.status).icon"></i>
+              {{ getStatusInfo(program.status).label }}
+            </div>
+
+            <div class="category-badge" [class]="'category-' + getCategoryInfo(program.category).color">
+              <i [class]="getCategoryInfo(program.category).icon"></i>
+              {{ getCategoryInfo(program.category).label }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Program Content -->
+        <div class="program-content">
+
+          <!-- Title -->
+          <h3 class="program-title">{{ program.title }}</h3>
+
+          <!-- Description -->
+          <p class="program-description">{{ program.shortDescription }}</p>
+
+          <!-- Progress Bar -->
+          <div class="progress-section" *ngIf="program.progress !== undefined">
+            <div class="progress-info">
+              <span class="progress-label">Progresso do Programa</span>
+              <span class="progress-value">{{ program.progress }}%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="program.progress"></div>
+            </div>
+          </div>
+
+          <!-- Program Meta -->
+          <div class="program-meta">
+            <div class="meta-item">
+              <i class="fa-regular fa-clock"></i>
+              <span class="meta-text">{{ program.duration }}</span>
+            </div>
+            <div class="meta-item">
+              <i class="fa-solid fa-users"></i>
+              <span class="meta-text">{{ program.beneficiaries }}</span>
+            </div>
+            <div class="meta-item">
+              <i class="fa-solid fa-money-bill"></i>
+              <span class="meta-text">{{ program.budget }}</span>
+            </div>
+          </div>
+
+          <!-- Coverage -->
+          <div class="coverage-section">
+            <span class="coverage-label">Cobertura:</span>
+            <div class="coverage-tags">
+              <span *ngFor="let area of program.coverage" class="coverage-tag">
+                {{ area }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Objectives Preview -->
+          <div class="objectives-preview">
+            <span class="objectives-label">Principais Objectivos:</span>
+            <ul class="objectives-list">
+              <li *ngFor="let objective of program.objectives.slice(0, 2)">{{ objective }}</li>
+              <li *ngIf="program.objectives.length > 2" class="more-objectives">
+                +{{ program.objectives.length - 2 }} mais...
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Program Footer -->
+        <div class="program-footer">
+          <button class="details-btn" (click)="openProgramModal(program)">
+            Ver Detalhes
+          </button>
+
+          <button
+            *ngIf="program.status === 'active' || program.status === 'upcoming'"
+            class="apply-btn"
+            (click)="applyToProgram(program)">
+            Candidatar-se
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- No Results -->
+    <div *ngIf="filteredPrograms.length === 0" class="no-results">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <h3>Nenhum programa encontrado</h3>
+      <p>Tente ajustar os filtros ou termos de pesquisa</p>
+      <button class="clear-filters-btn" (click)="clearFilters()">
+        Limpar Todos os Filtros
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="programs-cta">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="cta-title">Interessado nos Nossos Programas?</h2>
+      <p class="cta-description">
+        Descubra como pode participar e beneficiar dos programas do IDA.
+        Nossa equipa está pronta para ajudar no seu processo de candidatura.
+      </p>
+      <div class="cta-actions">
+        <a href="/candidaturas" class="cta-btn primary">
+          <i class="fa-regular fa-pen-to-square"></i> Inscrever-se num Programa
+        </a>
+        <a href="/duvidas" class="cta-btn secondary">
+          <i class="fa-regular fa-circle-question"></i> Perguntas Frequentes
+        </a>
+        <a href="/contactos" class="cta-btn outline">
+          <i class="fa-solid fa-phone"></i> Falar com Consultor
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Program Modal -->
+<div *ngIf="selectedProgram" class="modal-overlay" (click)="closeProgramModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <div class="modal-title-section">
+        <div class="program-icon-large">
+         <i [class]="selectedProgram.icon"></i>
+        </div>
+        <div>
+          <h2 class="modal-title">{{ selectedProgram.title }}</h2>
+          <div class="modal-subtitle">
+            <span class="status-badge" [class]="'status-' + getStatusInfo(selectedProgram.status).color">
+              {{ getStatusInfo(selectedProgram.status).icon }}
+              {{ getStatusInfo(selectedProgram.status).label }}
+            </span>
+            <span class="category-badge" [class]="'category-' + getCategoryInfo(selectedProgram.category).color">
+              {{ getCategoryInfo(selectedProgram.category).icon }}
+              {{ getCategoryInfo(selectedProgram.category).label }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <button class="modal-close" (click)="closeProgramModal()">×</button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+
+      <!-- Program Image -->
+      <div class="program-image">
+        <img [src]="selectedProgram.image" [alt]="selectedProgram.title" class="program-img">
+      </div>
+
+      <!-- Program Details -->
+      <div class="program-details">
+
+        <!-- Description -->
+        <div class="detail-section">
+          <h3>Descrição do Programa</h3>
+          <p class="program-full-description">{{ selectedProgram.fullDescription }}</p>
+        </div>
+
+        <!-- Key Information -->
+        <div class="detail-section">
+          <h3>Informações Chave</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Duração</span>
+              <span class="info-value">{{ selectedProgram.duration }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Orçamento</span>
+              <span class="info-value">{{ selectedProgram.budget }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Beneficiários</span>
+              <span class="info-value">{{ selectedProgram.beneficiaries }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Período</span>
+              <span class="info-value">
+                {{ selectedProgram.startDate | date:'MMM y' }} - {{ selectedProgram.endDate | date:'MMM y' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress -->
+        <div *ngIf="selectedProgram.progress !== undefined" class="detail-section">
+          <h3>Progresso do Programa</h3>
+          <div class="progress-container">
+            <div class="progress-bar-large">
+              <div class="progress-fill" [style.width.%]="selectedProgram.progress"></div>
+            </div>
+            <span class="progress-text-large">{{ selectedProgram.progress }}% Concluído</span>
+          </div>
+        </div>
+
+        <!-- Objectives -->
+        <div class="detail-section">
+          <h3>Objectivos</h3>
+          <ul class="detailed-list">
+            <li *ngFor="let objective of selectedProgram.objectives">{{ objective }}</li>
+          </ul>
+        </div>
+
+        <!-- Results -->
+        <div *ngIf="selectedProgram.results.length > 0" class="detail-section">
+          <h3>Resultados Alcançados</h3>
+          <ul class="detailed-list results-list">
+            <li *ngFor="let result of selectedProgram.results">{{ result }}</li>
+          </ul>
+        </div>
+
+        <!-- Requirements -->
+        <div class="detail-section">
+          <h3>Requisitos de Participação</h3>
+          <ul class="detailed-list requirements-list">
+            <li *ngFor="let requirement of selectedProgram.requirements">{{ requirement }}</li>
+          </ul>
+        </div>
+
+        <!-- Coverage -->
+        <div class="detail-section">
+          <h3>Cobertura Geográfica</h3>
+          <div class="coverage-list">
+            <span *ngFor="let area of selectedProgram.coverage" class="coverage-item">
+              <i class="fas fa-map-marker-alt"></i> {{ area }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Partners -->
+        <div *ngIf="selectedProgram.partners.length > 0" class="detail-section">
+          <h3>Parceiros</h3>
+          <div class="partners-grid">
+            <div *ngFor="let partner of selectedProgram.partners" class="partner-card">
+              <span class="partner-name">{{ partner }}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button class="btn secondary" (click)="closeProgramModal()">Fechar</button>
+
+      <button
+        *ngIf="selectedProgram.status === 'active' || selectedProgram.status === 'upcoming'"
+        class="btn primary"
+        (click)="applyToProgram(selectedProgram)">
+        <i class="fas fa-pen"></i> Candidatar-se a este Programa
+      </button>
+
+      <a [href]="'/programa/' + selectedProgram.id" class="btn outline">
+        <i class="fas fa-file-alt"></i> Ver Documentação Completa
+      </a>
+    </div>
+
+  </div>
+</div>

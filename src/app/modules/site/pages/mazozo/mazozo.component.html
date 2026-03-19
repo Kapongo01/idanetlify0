@@ -1,0 +1,432 @@
+<!-- Hero Section com Visual Impactante -->
+<section class="mazozo-hero">
+  <div class="hero-background">
+    <div class="hero-overlay"></div>
+    <div class="hero-particles"></div>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">Centro de Excelência</div>
+      <h1 class="hero-title">Centro de Investigação Agronómica do Mazozo</h1>
+      <p class="hero-subtitle">Laboratório de referência nacional em pesquisa e desenvolvimento agrário</p>
+      <div class="hero-actions">
+        <button class="hero-btn primary" (click)="startVirtualTour()">
+          <i class="icon icon-vr"></i>
+          Iniciar Tour Virtual 3D
+        </button>
+        <button class="hero-btn secondary" (click)="scrollToExplore()">
+          <i class="icon icon-explore"></i>
+          Explorar Instalações
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Breadcrumb -->
+<section class="breadcrumb-section">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a routerLink="/" class="breadcrumb-item">Início</a>
+      <span class="breadcrumb-separator">/</span>
+      <a routerLink="/instalacoes" class="breadcrumb-item">Instalações</a>
+      <span class="breadcrumb-separator">/</span>
+      <span class="breadcrumb-item active">Centro do Mazozo</span>
+    </nav>
+  </div>
+</section>
+
+<!-- Quick Stats -->
+<section class="quick-stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-icon">🔬</div>
+        <div class="stat-content">
+          <div class="stat-number">15+</div>
+          <div class="stat-label">Laboratórios Especializados</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">👨‍🔬</div>
+        <div class="stat-content">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Investigadores</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon"><i class="fas fa-seedling"></i></div>
+        <div class="stat-content">
+          <div class="stat-number">200+</div>
+          <div class="stat-label">Projectos de Pesquisa</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-content">
+          <div class="stat-number">25</div>
+          <div class="stat-label">Anos de Excelência</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Virtual Tour Section -->
+<section class="virtual-tour-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Tour Virtual 360°</h2>
+      <p class="section-subtitle">Explore as instalações do Centro do Mazozo em realidade virtual</p>
+    </div>
+
+    <div class="tour-container">
+      <!-- Tour Navigation -->
+      <div class="tour-nav">
+        <button class="tour-nav-btn active" data-location="reception">
+          <i class="icon icon-reception"></i>
+          Recepção
+        </button>
+        <button class="tour-nav-btn" data-location="labs">
+          <i class="icon icon-labs"></i>
+          Laboratórios
+        </button>
+        <button class="tour-nav-btn" data-location="greenhouse">
+          <i class="icon icon-greenhouse"></i>
+          Estufas
+        </button>
+        <button class="tour-nav-btn" data-location="library">
+          <i class="icon icon-library"></i>
+          Biblioteca
+        </button>
+        <button class="tour-nav-btn" data-location="fields">
+          <i class="icon icon-fields"></i>
+          Campos Experimentais
+        </button>
+      </div>
+
+      <!-- Tour Viewer -->
+      <div class="tour-viewer">
+        <div class="viewer-container">
+          <div class="viewer-placeholder" id="tourViewer">
+            <div class="placeholder-content">
+              <div class="placeholder-icon">🔬</div>
+              <h3>Tour Virtual do Mazozo</h3>
+              <p>Selecione uma área para iniciar a exploração em 360°</p>
+              <button class="start-tour-btn" (click)="startVirtualTour()">
+                <i class="icon icon-play"></i>
+                Iniciar Tour Completo
+              </button>
+            </div>
+          </div>
+
+          <!-- Tour Controls -->
+          <div class="tour-controls">
+            <button class="control-btn" id="zoomIn">
+              <i class="icon icon-zoom-in"></i>
+            </button>
+            <button class="control-btn" id="zoomOut">
+              <i class="icon icon-zoom-out"></i>
+            </button>
+            <button class="control-btn" id="fullscreen">
+              <i class="icon icon-fullscreen"></i>
+            </button>
+            <button class="control-btn" id="resetView">
+              <i class="icon icon-reset"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tour Info Panel -->
+        <div class="tour-info-panel">
+          <div class="info-header">
+            <h3 id="locationTitle">Área de Recepção</h3>
+            <button class="info-close" id="closeInfo">×</button>
+          </div>
+          <div class="info-content">
+            <p id="locationDescription">Bem-vindo ao Centro de Investigação Agronómica do Mazozo. Esta área serve como ponto de acolhimento para visitantes e investigadores.</p>
+            <div class="info-features">
+              <h4>Características:</h4>
+              <ul id="locationFeatures">
+                <li>Área de recepção climatizada</li>
+                <li>Exposição de projetos em curso</li>
+                <li>Posto de informação turística</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Laboratory Facilities -->
+<section class="facilities-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Laboratórios Especializados</h2>
+      <p class="section-subtitle">Infraestruturas de ponta para pesquisa agronómica de excelência</p>
+    </div>
+
+    <div class="facilities-grid">
+
+      <!-- Biotech Lab -->
+      <div class="facility-card">
+        <div class="facility-image">
+          <img src="/assets/images/mazozo/biotech-lab.jpg" alt="Laboratório de Biotecnologia" class="facility-img">
+          <div class="facility-badge">Biotecnologia</div>
+        </div>
+        <div class="facility-content">
+          <h3>Laboratório de Biotecnologia Vegetal</h3>
+          <p>Equipado para cultura de tecidos, transformação genética e análise molecular de plantas.</p>
+          <div class="facility-features">
+            <span class="feature">🧬 PCR em Tempo Real</span>
+            <span class="feature">🔍 Microscopia Electrónica</span>
+            <span class="feature">🧫 Cultura de Tecidos</span>
+          </div>
+          <button class="facility-btn" (click)="viewLabDetails('biotech')">
+            <i class="icon icon-view"></i>
+            Ver Detalhes
+          </button>
+        </div>
+      </div>
+
+      <!-- Soil Lab -->
+      <div class="facility-card">
+        <div class="facility-image">
+          <img src="/assets/images/mazozo/soil-lab.jpg" alt="Laboratório de Solos" class="facility-img">
+          <div class="facility-badge">Análise de Solos</div>
+        </div>
+        <div class="facility-content">
+          <h3>Laboratório de Análise de Solos</h3>
+          <p>Análise química, física e biológica de solos para recomendações de fertilização precisas.</p>
+          <div class="facility-features">
+            <span class="feature">🌡️ Análise Química</span>
+            <span class="feature">⚗️ Espectrometria</span>
+            <span class="feature"><i class="fas fa-chart-bar"></i> Modelagem</span>
+          </div>
+          <button class="facility-btn" (click)="viewLabDetails('soil')">
+            <i class="icon icon-view"></i>
+            Ver Detalhes
+          </button>
+        </div>
+      </div>
+
+      <!-- Plant Pathology -->
+      <div class="facility-card">
+        <div class="facility-image">
+          <img src="/assets/images/mazozo/pathology-lab.jpg" alt="Laboratório de Fitopatologia" class="facility-img">
+          <div class="facility-badge">Fitopatologia</div>
+        </div>
+        <div class="facility-content">
+          <h3>Laboratório de Fitopatologia</h3>
+          <p>Diagnóstico e controlo de doenças vegetais com equipamentos de última geração.</p>
+          <div class="facility-features">
+            <span class="feature">🦠 Isolamento</span>
+            <span class="feature">🔬 Identificação</span>
+            <span class="feature">💊 Controlo</span>
+          </div>
+          <button class="facility-btn" (click)="viewLabDetails('pathology')">
+            <i class="icon icon-view"></i>
+            Ver Detalhes
+          </button>
+        </div>
+      </div>
+
+      <!-- More labs... -->
+
+    </div>
+  </div>
+</section>
+
+<!-- Research Areas -->
+<section class="research-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Áreas de Investigação</h2>
+      <p class="section-subtitle">Focos estratégicos de pesquisa do Centro do Mazozo</p>
+    </div>
+
+    <div class="research-tabs">
+      <nav class="research-nav">
+        <button class="research-tab active" data-research="seeds">Melhoramento Vegetal</button>
+        <button class="research-tab" data-research="sustainability">Agricultura Sustentável</button>
+        <button class="research-tab" data-research="technology">Tecnologia Agrária</button>
+        <button class="research-tab" data-research="climate">Resiliência Climática</button>
+      </nav>
+
+      <div class="research-content">
+
+        <!-- Seeds Research -->
+        <div class="research-area active" id="seeds">
+          <div class="research-grid">
+            <div class="research-info">
+              <h3>Melhoramento Genético Vegetal</h3>
+              <p>Desenvolvimento de variedades de culturas adaptadas às condições angolanas, com foco em produtividade, resistência a doenças e tolerância ao stresse hídrico.</p>
+
+              <div class="research-highlights">
+                <div class="highlight">
+                  <div class="highlight-icon">🌽</div>
+                  <div class="highlight-content">
+                    <h4>Milho Tolerante à Seca</h4>
+                    <p>Variedades com 30% maior resistência à seca</p>
+                  </div>
+                </div>
+                <div class="highlight">
+                  <div class="highlight-icon">🥔</div>
+                  <div class="highlight-content">
+                    <h4>Batata-Doce Enriquecida</h4>
+                    <p>Alto teor de vitamina A para combate à desnutrição</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="research-visual">
+              <div class="visual-placeholder">
+                <img src="/assets/images/mazozo/seed-research.jpg" alt="Pesquisa em Sementes" class="research-img">
+                <div class="visual-badge">Em Progresso</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Other research areas would go here... -->
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Visiting Information -->
+<section class="visiting-section">
+  <div class="container">
+    <div class="visiting-grid">
+
+      <div class="visiting-info">
+        <h2>Visite o Centro do Mazozo</h2>
+        <p>Agende uma visita guiada às nossas instalações e conheça o trabalho de excelência em pesquisa agronómica.</p>
+
+        <div class="visiting-details">
+          <div class="detail-item">
+            <i class="icon icon-clock"></i>
+            <div class="detail-content">
+              <h4>Horário de Visitas</h4>
+              <p>Segunda a Sexta: 8h00 - 17h00<br>Sábado: 9h00 - 13h00</p>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <i class="icon icon-location"></i>
+            <div class="detail-content">
+              <h4>Localização</h4>
+              <p>Estrada Nacional 100, Mazozo<br>Província do Cuanza Norte, Angola</p>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <i class="icon icon-contact"></i>
+            <div class="detail-content">
+              <h4>Contactos</h4>
+              <p>Email: mazozominagrif.gov.ao<br>Telefone: +244 222 555 888</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="visiting-form">
+        <h3>Agendar Visita</h3>
+        <form class="booking-form" [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
+          <div class="form-group">
+            <label for="name">Nome Completo</label>
+            <input type="text" id="name" formControlName="name" placeholder="Seu nome completo">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" formControlName="email" placeholder="seu@email.com">
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Telefone</label>
+              <input type="tel" id="phone" formControlName="phone" placeholder="+244 XXX XXX XXX">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="date">Data Pretendida</label>
+              <input type="date" id="date" formControlName="date">
+            </div>
+
+            <div class="form-group">
+              <label for="visitors">Nº de Visitantes</label>
+              <select id="visitors" formControlName="visitors">
+                <option value="1">1 Pessoa</option>
+                <option value="2">2 Pessoas</option>
+                <option value="3">3 Pessoas</option>
+                <option value="4">4 Pessoas</option>
+                <option value="5">5+ Pessoas</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="interests">Áreas de Interesse</label>
+            <div class="interests-grid">
+              <label class="interest-option">
+                <input type="checkbox" formControlName="labTour" value="labTour">
+                <span class="checkmark"></span>
+                Tour pelos Laboratórios
+              </label>
+              <label class="interest-option">
+                <input type="checkbox" formControlName="fieldTour" value="fieldTour">
+                <span class="checkmark"></span>
+                Campos Experimentais
+              </label>
+              <label class="interest-option">
+                <input type="checkbox" formControlName="researchTalk" value="researchTalk">
+                <span class="checkmark"></span>
+                Palestra com Investigadores
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn" [disabled]="!bookingForm.valid">
+            <i class="icon icon-send"></i>
+            Solicitar Agendamento
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Virtual Tour Modal -->
+<div class="tour-modal" [class.active]="tourModalOpen">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Tour Virtual - Centro do Mazozo</h2>
+      <button class="modal-close" (click)="closeTourModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="tour-embed">
+        <!-- Aqui iria o embed do tour virtual 360° -->
+        <div class="tour-placeholder">
+          <div class="placeholder-content">
+            <div class="vr-icon">🥽</div>
+            <h3>Experiência de Tour Virtual</h3>
+            <p>Navegue pelas instalações do Centro do Mazozo usando os controles abaixo</p>
+            <div class="vr-controls">
+              <button class="vr-btn">←</button>
+              <button class="vr-btn">→</button>
+              <button class="vr-btn">↑</button>
+              <button class="vr-btn">↓</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

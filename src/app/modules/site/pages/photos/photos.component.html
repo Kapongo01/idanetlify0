@@ -1,0 +1,194 @@
+<!-- Hero Section -->
+<section class="photos-hero">
+  <div class="hero-background">
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">{{ pageData.hero.title }}</h1>
+      <p class="hero-subtitle">{{ pageData.hero.subtitle }}</p>
+    </div>
+  </div>
+</section>
+
+<!-- Album Grid Section -->
+<section class="albums-section">
+  <div class="container">
+    <!-- Categories Navigation -->
+    <nav class="categories-nav">
+      <button
+        *ngFor="let category of categories"
+        class="category-btn"
+        [class.active]="selectedCategory === category.value"
+        (click)="selectedCategory = category.value"
+      >
+        <i [class]="category.icon"></i>
+        <span>{{ category.label }}</span>
+      </button>
+    </nav>
+
+    <!-- Albums Grid -->
+    <div class="albums-grid">
+      <div
+        *ngFor="let album of filteredAlbums"
+        class="album-card"
+        (click)="openAlbum(album)"
+      >
+        <!-- Album Cover -->
+        <div class="album-cover">
+          <img
+            [src]="album.coverImage"
+            [alt]="album.title"
+            class="cover-image"
+          />
+          <div class="album-overlay">
+            <div class="photo-count">
+              <span class="count-icon">
+                <i class="fas fa-camera"></i>
+              </span>
+              {{ album.photoCount }} fotos
+            </div>
+            <div class="view-album-btn">Ver Álbum</div>
+          </div>
+          <div class="album-badge" *ngIf="album.featured">
+            <span class="badge-icon">
+              <i class="fas fa-star"></i>
+            </span>
+            Destaque
+          </div>
+        </div>
+
+        <!-- Album Info -->
+        <!-- Album Info -->
+        <div class="album-info">
+          <div class="album-meta">
+            <span class="album-category">
+              <i [class]="getCategoryInfo(album.category).icon"></i>
+              {{ getCategoryInfo(album.category).label }}
+            </span>
+
+            <span class="album-date">
+              {{ formatDate(album.date) }}
+            </span>
+          </div>
+
+          <h3 class="album-title">{{ album.title }}</h3>
+          <p class="album-description">{{ album.description }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Results -->
+    <div *ngIf="filteredAlbums.length === 0" class="no-results">
+      <div class="no-results-icon"><i class="fas fa-camera"></i></div>
+      <h3>Nenhum álbum encontrado</h3>
+      <p>Tente selecionar uma categoria diferente</p>
+    </div>
+  </div>
+</section>
+
+<!-- Album Modal -->
+<div *ngIf="selectedAlbum" class="album-modal-overlay" (click)="closeAlbum()">
+  <div class="album-modal-content" (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <div class="modal-title-section">
+        <h2 class="modal-title">{{ selectedAlbum.title }}</h2>
+        <div class="modal-meta">
+          <span class="album-category">
+            <i [class]="getCategoryInfo(selectedAlbum.category).icon"></i>
+            {{ getCategoryInfo(selectedAlbum.category).label }}</span
+          >
+          <span class="album-date">{{ formatDate(selectedAlbum.date) }}</span>
+          <span class="photo-count-modal"
+            >{{ selectedAlbum.photoCount }} fotos</span
+          >
+        </div>
+      </div>
+      <button class="modal-close" (click)="closeAlbum()">×</button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <!-- Photo Grid -->
+      <div class="photo-grid-modal">
+        <div
+          *ngFor="let photo of selectedAlbum.photos; let i = index"
+          class="photo-item"
+          (click)="openLightbox(i)"
+        >
+          <img
+            [src]="photo"
+            [alt]="'Foto ' + (i + 1) + ' do álbum ' + selectedAlbum.title"
+            class="photo-thumb"
+          />
+          <div class="photo-overlay">
+            <span class="zoom-icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Album Description -->
+      <div class="album-description-modal">
+        <h4>Sobre este álbum</h4>
+        <p>{{ selectedAlbum.description }}</p>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button class="btn secondary" (click)="closeAlbum()">Fechar</button>
+      <button class="btn primary" (click)="downloadAlbum()">
+         <i class="fas fa-download"></i> Download
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div *ngIf="lightboxActive" class="lightbox-overlay" (click)="closeLightbox()">
+  <div class="lightbox-content" (click)="$event.stopPropagation()">
+    <!-- Lightbox Header -->
+    <div class="lightbox-header">
+      <div class="lightbox-info">
+        <span class="photo-counter">
+          {{ currentPhotoIndex + 1 }} / {{ selectedAlbum!.photos.length }}
+        </span>
+        <span class="album-title-lightbox">{{ selectedAlbum!.title }}</span>
+      </div>
+      <button class="lightbox-close" (click)="closeLightbox()">×</button>
+    </div>
+
+    <!-- Lightbox Body -->
+    <div class="lightbox-body">
+      <button class="nav-btn prev-btn" (click)="prevPhoto()">‹</button>
+
+      <div class="lightbox-image-container">
+        <img
+          [src]="selectedAlbum!.photos[currentPhotoIndex]"
+          [alt]="
+            'Foto ' +
+            (currentPhotoIndex + 1) +
+            ' do álbum ' +
+            selectedAlbum!.title
+          "
+          class="lightbox-image"
+        />
+      </div>
+
+      <button class="nav-btn next-btn" (click)="nextPhoto()">›</button>
+    </div>
+
+    <!-- Lightbox Footer -->
+    <div class="lightbox-footer">
+      <div class="lightbox-actions">
+        <button class="action-btn" (click)="downloadPhoto()">
+          <i class="fas fa-download"></i> Download
+        </button>
+        <button class="action-btn" (click)="sharePhoto()">🔗 Partilhar</button>
+      </div>
+    </div>
+  </div>
+</div>

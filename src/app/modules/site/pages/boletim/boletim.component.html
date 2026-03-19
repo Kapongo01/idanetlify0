@@ -1,0 +1,401 @@
+<!-- Hero Section -->
+<section class="projects-hero">
+  <div class="hero-background">
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">Boletins Agropecuários</h1>
+      <p class="hero-subtitle">
+        Informações atualizadas sobre mercados, previsões climáticas e
+        tendências do agronegócio
+      </p>
+
+      <!-- Quick Stats -->
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number">{{ boletins.length }}</div>
+          <div class="stat-label">Edições</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ contarInscritos() }}</div>
+          <div class="stat-label">Inscritos</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ contarPeriodicidades() }}</div>
+          <div class="stat-label">Periodicidades</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ contarDownloads() }}</div>
+          <div class="stat-label">Downloads</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Search and Filters Section -->
+<section class="filters-section">
+  <div class="container">
+    <div class="filters-container">
+      <!-- Search Bar -->
+      <div class="search-box">
+        <div class="search-icon">
+          <i class="fas fa-search"></i>
+        </div>
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Pesquisar boletins..."
+          class="search-input"
+          (input)="aplicarFiltros()"
+        />
+        <button class="search-btn" (click)="clearFilters()">Limpar</button>
+      </div>
+
+      <!-- Filters Row -->
+      <div class="filters-row">
+        <!-- Periodicidade Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Periodicidade</label>
+          <select
+            [(ngModel)]="selectedPeriodicidade"
+            class="filter-select"
+            (change)="aplicarFiltros()"
+          >
+            <option value="all">Todas</option>
+            <option value="semanal">Semanal</option>
+            <option value="quinzenal">Quinzenal</option>
+            <option value="mensal">Mensal</option>
+          </select>
+        </div>
+
+        <!-- Year Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Ano</label>
+          <select
+            [(ngModel)]="selectedYear"
+            class="filter-select"
+            (change)="aplicarFiltros()"
+          >
+            <option value="all">Todos os Anos</option>
+            <option *ngFor="let year of years" [value]="year">
+              {{ year }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Status</label>
+          <select
+            [(ngModel)]="selectedStatus"
+            class="filter-select"
+            (change)="aplicarFiltros()"
+          >
+            <option value="all">Todos</option>
+            <option value="disponivel">Disponível</option>
+            <option value="proximo">Próxima Edição</option>
+          </select>
+        </div>
+
+        <!-- Sort Options -->
+        <div class="filter-group">
+          <label class="filter-label">Ordenar por</label>
+          <select
+            [(ngModel)]="sortBy"
+            class="filter-select"
+            (change)="aplicarFiltros()"
+          >
+            <option value="recentes">Mais Recentes</option>
+            <option value="antigos">Mais Antigos</option>
+            <option value="titulo">Título A-Z</option>
+            <option value="downloads">⬇Mais Downloads</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Active Filters -->
+      <div
+        class="active-filters"
+        *ngIf="
+          selectedPeriodicidade !== 'all' ||
+          selectedYear !== 'all' ||
+          selectedStatus !== 'all'
+        "
+      >
+        <span class="filters-label">Filtros activos:</span>
+
+        <span *ngIf="selectedPeriodicidade !== 'all'" class="filter-tag">
+          {{ getPeriodicidadeIcon(selectedPeriodicidade) }}
+          {{ getPeriodicidadeLabel(selectedPeriodicidade) }}
+          <button (click)="selectedPeriodicidade = 'all'; aplicarFiltros()">
+            ×
+          </button>
+        </span>
+
+        <span *ngIf="selectedYear !== 'all'" class="filter-tag">
+          <i class="fas fa-calendar-day"></i> Período {{ selectedYear }}
+          <button (click)="selectedYear = 'all'; aplicarFiltros()">×</button>
+        </span>
+
+        <span *ngIf="selectedStatus !== 'all'" class="filter-tag">
+          {{ getStatusIcon(selectedStatus) }}
+          {{ getStatusLabel(selectedStatus) }}
+          <button (click)="selectedStatus = 'all'; aplicarFiltros()">×</button>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Boletins Grid Section -->
+<section class="projects-grid-section">
+  <div class="container">
+    <!-- Results Header -->
+    <div class="results-header">
+      <h2 class="results-title">
+        {{ boletinsFiltrados.length }} Boleti{{
+          boletinsFiltrados.length !== 1 ? "ns" : "m"
+        }}
+        Encontrado{{ boletinsFiltrados.length !== 1 ? "s" : "" }}
+      </h2>
+      <div class="results-actions">
+        <button class="export-btn" (click)="inscreverBoletim()">
+          <span class="subscribe-email">
+            <i class="fas fa-envelope"></i> Inscrever-se
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Boletins Grid -->
+    <div class="projects-grid">
+      <div
+        *ngFor="let boletim of boletinsFiltrados"
+        class="project-card"
+        (click)="openBoletimModal(boletim)"
+      >
+        <!-- Boletim Image -->
+        <div class="project-image">
+          <img
+            [src]="boletim.imagem"
+            [alt]="boletim.titulo"
+            class="project-img"
+          />
+          <div class="project-overlay"></div>
+
+          <!-- Status Badge -->
+          <div
+            class="status-badge"
+            [class]="
+              'status-' + (boletim.status === 'disponivel' ? 'green' : 'blue')
+            "
+          >
+            <i [class]=" getStatusIcon(boletim.status) "></i>
+            {{ getStatusLabel(boletim.status) }}
+          </div>
+
+          <!-- Downloads Counter -->
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              [style.width.%]="getDownloadPercentage(boletim)"
+            ></div>
+            <span class="progress-text">{{ boletim.downloads }} downloads</span>
+          </div>
+        </div>
+
+        <!-- Boletim Content -->
+        <div class="project-content">
+          <!-- Periodicidade -->
+          <div class="project-category">
+            <span class="category-icon">
+             <i [class]=" getPeriodicidadeIcon(boletim.periodicidade) "></i>
+            </span>
+            {{ getPeriodicidadeLabel(boletim.periodicidade) }}
+          </div>
+
+          <!-- Title -->
+          <h3 class="project-title">{{ boletim.titulo }}</h3>
+
+          <!-- Description -->
+          <p class="project-description">{{ boletim.resumo }}</p>
+
+          <!-- Boletim Meta -->
+          <div class="project-meta">
+            <div class="meta-item">
+              <span class="meta-icon">
+                <i class="fas fa-chart-bar"></i>
+              </span>
+              <span class="meta-text">
+                {{ boletim.indicadores.cotacoes }} cotações
+              </span>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-icon">
+                <i class="fas fa-cloud-sun"></i>
+              </span>
+              <span class="meta-text">
+                {{ boletim.indicadores.previsoes }} previsões
+              </span>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-icon">
+                <i class="fas fa-file-alt"></i>
+              </span>
+              <span class="meta-text">
+                {{ boletim.indicadores.artigos }} artigos
+              </span>
+            </div>
+          </div>
+          <!-- Timeline -->
+          <div class="project-timeline">
+            <div class="timeline-item">
+              <span class="timeline-label">Edição</span>
+              <span class="timeline-date">{{ boletim.numeroEdicao }}</span>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-label">Publicação</span>
+              <span class="timeline-date">{{
+                boletim.dataPublicacao | date: "MMM y"
+              }}</span>
+            </div>
+          </div>
+
+          <!-- View Details -->
+          <div class="project-actions">
+            <button class="view-details-btn">Ver Detalhes →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Results -->
+    <div *ngIf="boletinsFiltrados.length === 0" class="no-results">
+      <div class="no-results-icon"> <i fas fa-search></i></div>
+      <h3>Nenhum boletim encontrado</h3>
+      <p>Tente ajustar os filtros ou termos de pesquisa</p>
+      <button class="clear-filters-btn" (click)="clearFilters()">
+        Limpar Todos os Filtros
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="projects-cta">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="cta-title">Mantenha-se Actualizado</h2>
+      <p class="cta-description">
+        Inscreva-se no nosso boletim informativo e receba as últimas
+        actualizações do mercado agrícola directamente no seu email.
+      </p>
+      <div class="cta-actions">
+        <button class="cta-btn primary" (click)="inscreverBoletim()">
+          <i class="fas fa-envelope"></i> Inscrever-se no boletim
+        </button>
+        <a href="/contactos" class="cta-btn secondary">
+            <i class="fas fa-phone"></i>Falar com a equipa
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal de Inscrição -->
+<div
+  *ngIf="mostrarModalInscricao"
+  class="modal-overlay"
+  (click)="fecharModalInscricao()"
+>
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <i class="fas fa-envelope-open-text"></i> Inscrever-se no Boletim
+      </h2>
+      <button class="modal-close" (click)="fecharModalInscricao()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <form
+        #inscricaoForm="ngForm"
+        (ngSubmit)="confirmarInscricao(inscricaoForm)"
+      >
+        <div class="detail-section">
+          <div class="detail-grid">
+
+            <div class="detail-item">
+              <label class="detail-label">
+                <i class="fas fa-user"></i> Nome Completo
+              </label>
+              <input
+                type="text"
+                name="nome"
+                ngModel
+                required
+                class="filter-select"
+              />
+            </div>
+
+            <div class="detail-item">
+              <label class="detail-label">
+                <i class="fas fa-envelope"></i> Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                ngModel
+                required
+                class="filter-select"
+              />
+            </div>
+
+            <div class="detail-item">
+              <label class="detail-label">
+                <i class="fas fa-calendar-alt"></i> Periodicidade
+              </label>
+              <select name="periodicidade" ngModel class="filter-select">
+                <option value="semanal">Semanal</option>
+                <option value="quinzenal">Quinzenal</option>
+                <option value="mensal">Mensal</option>
+              </select>
+            </div>
+
+            <div class="detail-item">
+              <label class="detail-label">
+                <i class="fas fa-bullseye"></i> Interesses
+              </label>
+              <select name="interesses" ngModel class="filter-select">
+                <option value="mercado">Mercado</option>
+                <option value="clima">Clima</option>
+                <option value="tecnologia">Tecnologia</option>
+                <option value="todos">Todos</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn secondary"
+            (click)="fecharModalInscricao()"
+          >
+            <i class="fas fa-times"></i> Cancelar
+          </button>
+
+          <button type="submit" class="btn primary">
+            <i class="fas fa-check"></i> Confirmar Inscrição
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

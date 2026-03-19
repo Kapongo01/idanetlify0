@@ -1,0 +1,152 @@
+.footer {
+  background: #0b0b0b;
+  color: #fff;
+  padding: 80px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+  gap: 50px;
+}
+
+.logo-img {
+  height: 100px;
+  width: 100px; /* garante proporção quadrada para ficar círculo perfeito */
+  border-radius: 50%; /* transforma em círculo */
+  margin-bottom: 20px;
+  
+}
+
+
+.logo-text {
+ color: #FAEE20;
+}
+
+.footer-description {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  opacity: 0.85;
+  max-width: 320px;
+}
+
+.footer-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.footer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+
+    a {
+      color: #fff;
+      text-decoration: none;
+      opacity: 0.85;
+      transition: 0.3s;
+    }
+
+    a:hover {
+      opacity: 1;
+      color: #FAEE20;
+    }
+  }
+}
+
+.arrow {
+  color:  #FAEE20;
+  font-size: 1.2rem;
+}
+
+.contact-line {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.contact-icon {
+  color:#FAEE20;
+}
+
+.social-icons {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.social-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #FAEE20;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.social-circle:hover {
+  background: #fff;
+}
+.social-circle i {
+  font-size: 16px;
+}
+
+/* LINHA HORIZONTAL FULL-WIDTH */
+.footer-separator {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  width: 100%;
+  margin: 40px 0 20px 0;
+}
+
+/* RODAPÉ INFERIOR FULL-WIDTH */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 40px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  box-sizing: border-box;
+  flex-wrap: wrap;
+}
+
+.footer-copy,
+.footer-developed {
+  margin: 5px 0;
+}
+
+/* RESPONSIVO */
+@media (max-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 5px;
+    padding: 0 20px;
+  }
+}

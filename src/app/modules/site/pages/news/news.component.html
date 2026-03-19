@@ -1,0 +1,347 @@
+<!-- Hero Section -->
+<section class="news-hero">
+
+  <!-- SLIDES -->
+  <div class="hero-slides">
+    <div
+      class="hero-slide"
+      *ngFor="let slide of slides; let i = index"
+      [class.active]="i === currentIndex"
+      [style.backgroundImage]="'url(' + slide.image + ')'"
+    ></div>
+  </div>
+
+  <!-- OVERLAY (mantém o teu) -->
+  <div class="hero-background">
+    <div class="hero-overlay"></div>
+  </div>
+
+  <!-- CONTEÚDO -->
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">{{ slides[currentIndex]?.title }}</h1>
+      <p class="hero-subtitle">{{ slides[currentIndex]?.subtitle }}</p>
+    </div>
+  </div>
+
+  <!-- CONTROLOS -->
+  <button class="prev" (click)="prevSlide()">❮</button>
+  <button class="next" (click)="nextSlide()">❯</button>
+
+</section>
+
+
+<!-- Search and Filters Section -->
+<section class="filters-section">
+  <div class="container">
+    <div class="filters-container">
+
+      <!-- Search Bar -->
+      <div class="search-box">
+        <div class="search-icon">
+           <i class="fas fa-search"></i>
+        </div>
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Pesquisar notícias..."
+          class="search-input">
+        <button class="search-btn" (click)="clearFilters()">Limpar</button>
+      </div>
+
+      <!-- Filters Row -->
+      <div class="filters-row">
+
+        <!-- Category Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Categoria</label>
+          <select [(ngModel)]="selectedCategory" class="filter-select">
+            <option *ngFor="let cat of categories" [value]="cat.value">
+              {{ cat.icon }} {{ cat.label }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Period Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Período</label>
+          <select [(ngModel)]="selectedPeriod" class="filter-select">
+            <option *ngFor="let period of periods" [value]="period.value">
+              {{ period.label }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Sort Options -->
+        <div class="filter-group">
+          <label class="filter-label">Ordenar por</label>
+          <select [(ngModel)]="sortBy" class="filter-select">
+            <option *ngFor="let option of sortOptions" [value]="option.value">
+              {{ option.label }}
+            </option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Active Filters -->
+      <div class="active-filters" *ngIf="selectedCategory !== 'all' || selectedPeriod !== 'all'">
+        <span class="filters-label">Filtros activos:</span>
+
+        <span *ngIf="selectedCategory !== 'all'" class="filter-tag">
+          {{ getCategoryInfo(selectedCategory).icon }} {{ getCategoryInfo(selectedCategory).label }}
+          <button (click)="selectedCategory = 'all'">×</button>
+        </span>
+
+        <span *ngIf="selectedPeriod !== 'all'" class="filter-tag">
+            {{ getPeriodLabel(selectedPeriod) }}
+          <button (click)="selectedPeriod = 'all'">×</button>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- News Grid Section -->
+<section class="news-grid-section">
+  <div class="container">
+
+    <!-- Results Header -->
+    <div class="results-header">
+      <h2 class="results-title">
+        {{ filteredNews.length }} Notícia{{ filteredNews.length !== 1 ? 's' : '' }} Encontrada{{ filteredNews.length !== 1 ? 's' : '' }}
+      </h2>
+      <div class="results-actions">
+        <button class="subscribe-btn">
+         <i class="fas fa-envelope"></i> Subscrever Newsletter
+        </button>
+      </div>
+    </div>
+
+    <!-- Featured News -->
+    <div class="featured-news" *ngIf="featuredNews.length > 0">
+      <h3 class="featured-title">Notícias em Destaque</h3>
+      <div class="featured-grid">
+        <div
+          *ngFor="let news of featuredNews"
+          class="featured-card"
+          (click)="openNewsModal(news)">
+
+          <div class="featured-image">
+            <img [src]="news.image" [alt]="news.title" class="news-img">
+            <div class="featured-overlay"></div>
+            <div class="featured-badge">
+              <span class="badge-icon"></span>
+              Destaque
+            </div>
+          </div>
+
+          <div class="featured-content">
+            <div class="news-meta">
+              <span class="news-category" [class]="'category-' + getCategoryInfo(news.category).color">
+                {{ getCategoryInfo(news.category).icon }} {{ getCategoryInfo(news.category).label }}
+              </span>
+              <span class="news-date">{{ formatDate(news.date) }}</span>
+            </div>
+
+            <h3 class="news-title">{{ news.title }}</h3>
+            <p class="news-excerpt">{{ news.excerpt }}</p>
+
+        <div class="news-stats">
+            <span class="stat-item">
+              <i class="fas fa-eye"></i> {{ news.views }}
+            </span>
+            <span class="stat-item">
+              <i class="fas fa-heart"></i> {{ news.likes }}
+            </span>
+            <span class="stat-item">
+              <i class="fas fa-clock"></i> {{ news.readTime }}
+            </span>
+        </div>
+            <div class="news-tags">
+              <span *ngFor="let tag of news.tags.slice(0, 2)" class="news-tag">
+                #{{ tag }}
+              </span>
+              <span *ngIf="news.tags.length > 2" class="more-tags">
+                +{{ news.tags.length - 2 }} tags
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Regular News Grid -->
+    <div class="news-grid">
+      <div
+        *ngFor="let news of regularNews"
+        class="news-card"
+        (click)="openNewsModal(news)">
+
+        <div class="news-image">
+          <img [src]="news.image" [alt]="news.title" class="news-img">
+          <div class="news-overlay"></div>
+          <div class="news-category-badge" [class]="'category-' + getCategoryInfo(news.category).color">
+            {{ getCategoryInfo(news.category).icon }}
+          </div>
+        </div>
+
+        <div class="news-content">
+          <div class="news-meta">
+            <span class="news-date">{{ formatDate(news.date) }}</span>
+            <span class="news-read-time">{{ news.readTime }}</span>
+          </div>
+
+          <h3 class="news-title">{{ news.title }}</h3>
+          <p class="news-excerpt">{{ news.excerpt }}</p>
+
+          <div class="news-footer">
+            <span class="news-author">Por {{ news.author }}</span>
+            <div class="news-stats-small">
+              <span class="stat">
+                <i class="fas fa-eye"></i> {{ news.views }}
+              </span>
+              <span class="stat">
+                <i class="fas fa-heart"></i> {{ news.likes }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Results -->
+    <div *ngIf="filteredNews.length === 0" class="no-results">
+      <div class="no-results-icon"></div>
+      <h3>Nenhuma notícia encontrada</h3>
+      <p>Tente ajustar os filtros ou termos de pesquisa</p>
+      <button class="clear-filters-btn" (click)="clearFilters()">
+        Limpar Todos os Filtros
+      </button>
+    </div>
+
+    <!-- Load More -->
+    <div class="load-more-section" *ngIf="filteredNews.length > 6">
+      <button class="load-more-btn">
+         Carregar Mais Notícias
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="news-cta">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="cta-title">Mantenha-se Actualizado</h2>
+      <p class="cta-description">
+        Receba as últimas notícias e desenvolvimentos do sector agrário
+        directamente no seu email. Subscreva a nossa newsletter.
+      </p>
+      <div class="cta-actions">
+        <a href="/newsletter" class="cta-btn primary">
+          <i class="fas fa-envelope"></i> Subscrever Newsletter
+        </a>
+        <a href="/rss" class="cta-btn secondary">
+          <i class="fas fa-rss"></i> Subscrever RSS
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- News Modal -->
+<div *ngIf="selectedNews" class="modal-overlay" (click)="closeNewsModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <div class="modal-title-section">
+        <h2 class="modal-title">{{ selectedNews.title }}</h2>
+        <div class="modal-meta">
+          <span class="news-category" [class]="'category-' + getCategoryInfo(selectedNews.category).color">
+            <i [class]="getCategoryInfo(selectedNews.category).icon"></i> {{ getCategoryInfo(selectedNews.category).label }}
+          </span>
+          <span class="news-date">{{ formatDate(selectedNews.date) }}</span>
+          <span class="news-read-time">
+            <i class="fas fa-clock"></i> {{ selectedNews.readTime }} de leitura
+          </span>
+        </div>
+      </div>
+      <button class="modal-close" (click)="closeNewsModal()"><i class="fas fa-times"></i></button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+
+      <!-- News Image -->
+      <div class="news-image-modal">
+        <img [src]="selectedNews.image" [alt]="selectedNews.title" class="news-img-modal">
+      </div>
+
+      <!-- News Content -->
+      <div class="news-content-modal">
+
+        <!-- Author and Stats -->
+        <div class="news-info">
+          <div class="author-info">
+            <span class="author-label">Por</span>
+            <span class="author-name">{{ selectedNews.author }}</span>
+          </div>
+          <div class="news-stats-modal">
+            <span class="stat">
+              <i class="fas fa-eye"></i> {{ selectedNews.views }} visualizações
+            </span>
+            <span class="stat">
+              <i class="fas fa-heart"></i> {{ selectedNews.likes }} likes
+            </span>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="news-full-content">
+          <p>{{ selectedNews.content }}</p>
+          <p>O programa visa atingir mais de 50.000 famílias agricultoras em todas as províncias de Angola,
+          com condições especiais de financiamento e acompanhamento técnico especializado.</p>
+        </div>
+
+        <!-- Tags -->
+        <div class="news-tags-modal">
+          <h4>Tags:</h4>
+          <div class="tags-list">
+            <span *ngFor="let tag of selectedNews.tags" class="news-tag-modal">
+              <i class="fas fa-tag"></i> {{ tag }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Social Sharing -->
+        <div class="social-sharing">
+          <h4>Partilhar esta notícia:</h4>
+          <div class="sharing-buttons">
+            <button class="share-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</button>
+            <button class="share-btn twitter"><i class="fab fa-twitter"></i> Twitter</button>
+            <button class="share-btn linkedin"><i class="fab fa-linkedin-in"></i> LinkedIn</button>
+            <button class="share-btn whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button class="btn secondary" (click)="closeNewsModal()">Fechar</button>
+      <button class="btn primary" (click)="likeNews(selectedNews)">
+        <i class="fas fa-heart"></i> Gostei desta notícia
+      </button>
+      <a href="/noticias" class="btn outline">
+        <i class="fas fa-newspaper"></i> Ver Todas as Notícias
+      </a>
+    </div>
+
+  </div>
+</div>

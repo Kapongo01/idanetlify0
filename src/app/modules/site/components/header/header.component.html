@@ -1,0 +1,415 @@
+<!-- Header Component para IDA - Versão com Mega Menu -->
+<header class="header-container">
+
+  <!-- Top Bar Melhorada -->
+  <div class="top-bar">
+    <div class="top-bar-content">
+      <!-- Contatos à esquerda -->
+      <div class="contact-info">
+        <a href="mailto:info@ida.gov.ao" class="contact-link">
+          <span class="contact-text">info&#64;ida.gov.ao</span>
+        </a>
+
+        <span class="separator">•</span>
+
+        <a href="tel:+244222333000" class="contact-link">
+          <span class="contact-text">+244 222 333 000</span>
+        </a>
+
+        <span class="separator">•</span>
+
+        <!-- Localização IDA -->
+        <div class="location-info">
+          <span class="contact-text">Ministério da Agricultura, Luanda</span>
+        </div>
+      </div>
+
+      <!-- Links úteis à direita -->
+      <div class="utility-links">
+        <a href="/politica-privacidade" class="utility-link">
+          Privacidade
+        </a>
+        <span class="separator">•</span>
+        <a href="/sugestoes" class="utility-link">
+          Sugestões
+        </a>
+        <span class="separator">•</span>
+        <a routerLink="/sitemap" class="utility-link">
+          Sitemap
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu Principal IDA -->
+  <div class="main-nav-container">
+    <div class="nav-content">
+      <!-- Logo -->
+      <div class="logo-section">
+        <div class="logo-group">
+          <a routerLink="/" class="logo-link">
+            <div class="logo-wrapper">
+
+              <img src="assets/img/logo/min.jpg"
+                   alt="República de Angola"
+                   class="logo-img">
+            </div>
+          </a>
+
+          <div class="logo-divider"></div>
+
+          <a routerLink="/" class="logo-link">
+            <div class="logo-wrapper">
+              <img src="assets/img/logo/ida.png"
+                   alt="IDA - Instituto de Desenvolvimento Agrário"
+                   class="logo-img">
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Navigation (Desktop) -->
+      <nav class="desktop-nav">
+
+        <!-- Início -->
+        <a routerLink="/" class="nav-item">
+          <span class="nav-text">Início</span>
+        </a>
+
+        <!-- Sobre o IDA com Mega Menu -->
+        <div class="nav-mega" (mouseenter)="openMegaMenu('sobre')" (mouseleave)="closeMegaMenu('sobre')">
+          <a class="nav-item mega-trigger">
+            <span class="nav-text">Sobre o IDA</span>
+            <span class="dropdown-arrow">▼</span>
+          </a>
+
+          <!-- Mega Menu Elegante -->
+          <div class="mega-menu" id="sobre-mega">
+            <div class="mega-content">
+              <div class="mega-column">
+                <h3 class="mega-title">Institucional</h3>
+                <div class="mega-links">
+                  <a routerLink="/estatuto-organico" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Estatuto Orgânico</span>
+                      <span class="mega-link-desc">Conheça a estrutura legal do IDA</span>
+                    </div>
+                  </a>
+                  <a routerLink="/organigrama" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Organigrama</span>
+                      <span class="mega-link-desc">Estrutura organizacional completa</span>
+                    </div>
+                  </a>
+                  <a routerLink="/ministerio" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Sobre o Ministério</span>
+                      <span class="mega-link-desc">Contexto ministerial do IDA</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+
+              <div class="mega-column">
+                <h3 class="mega-title">Liderança</h3>
+                <div class="mega-links">
+                  <a routerLink="/titular" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Perfil do Titular</span>
+                      <span class="mega-link-desc">Conheça a liderança do instituto</span>
+                    </div>
+                  </a>
+                  <a routerLink="/directivo" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Corpo Directivo</span>
+                      <span class="mega-link-desc">Equipe de direção do IDA</span>
+                    </div>
+                  </a>
+                  <a routerLink="/historico" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Histórico</span>
+                      <span class="mega-link-desc">Trajetória do instituto</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+
+              <div class="mega-feature">
+                <div class="feature-card">
+                  <div class="feature-icon"><i class="fas fa-university"></i></div>
+                  <h4>Missão e Visão</h4>
+                  <p>Conheça o Instituto de Desenvolvimento Agrário</p>
+                  <a routerLink="/mazozo" class="feature-link">Conhecer →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Programas com Mega Menu -->
+        <div class="nav-mega" (mouseenter)="openMegaMenu('programas')" (mouseleave)="closeMegaMenu('programas')">
+          <a class="nav-item mega-trigger">
+            <span class="nav-text">Programas</span>
+            <span class="dropdown-arrow">▼</span>
+          </a>
+
+          <div class="mega-menu" id="programas-mega">
+            <div class="mega-content">
+              <div class="mega-column">
+                <h3 class="mega-title">Programas Agrícolas</h3>
+                <div class="mega-links">
+                  <a routerLink="/programas" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Programa de Sementes</span>
+                      <span class="mega-link-desc">Distribuição de sementes certificadas</span>
+                    </div>
+                  </a>
+                  <a routerLink="/programas" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Programa de Irrigação</span>
+                      <span class="mega-link-desc">Sistemas de irrigação modernos</span>
+                    </div>
+                  </a>
+                  <a routerLink="/programas" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Programa de Maquinaria</span>
+                      <span class="mega-link-desc">Equipamentos agrícolas</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+
+              <div class="mega-column">
+                <h3 class="mega-title">Desenvolvimento</h3>
+                <div class="mega-links">
+                  <a routerLink="/programas" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Desenvolvimento Rural</span>
+                      <span class="mega-link-desc">Infraestruturas comunitárias</span>
+                    </div>
+                  </a>
+                  <a routerLink="/programas" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Investimento Agrário</span>
+                      <span class="mega-link-desc">Financiamento e crédito</span>
+                    </div>
+                  </a>
+                  <a routerLink="/programas" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Capacitação Técnica</span>
+                      <span class="mega-link-desc">Formação de agricultores</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+
+              <div class="mega-feature">
+                <div class="feature-card highlight">
+                  <div class="feature-icon"><i class="fas fa-tractor"></i></div>
+                  <h4>Programa Agro-Jovem</h4>
+                  <p>Incentivo à participação dos jovens no sector agrário</p>
+                  <a routerLink="/agro-jovem" class="feature-link">Participar →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Projectos -->
+        <a routerLink="/projectos" class="nav-item">
+          <span class="nav-text">Projectos</span>
+        </a>
+
+        <!-- Parceiros -->
+        <a routerLink="/parceiros" class="nav-item">
+          <span class="nav-text">Parceiros</span>
+        </a>
+
+        <!-- Mídias com Mega Menu -->
+        <div class="nav-mega" (mouseenter)="openMegaMenu('midias')" (mouseleave)="closeMegaMenu('midias')">
+          <a class="nav-item mega-trigger">
+            <span class="nav-text">Mídias</span>
+            <span class="dropdown-arrow">▼</span>
+          </a>
+
+          <div class="mega-menu" id="midias-mega">
+            <div class="mega-content">
+              <div class="mega-column">
+                <h3 class="mega-title">Conteúdo Digital</h3>
+                <div class="mega-links">
+                  <a routerLink="/noticias" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Notícias</span>
+                      <span class="mega-link-desc">Últimas actualizações</span>
+                    </div>
+                  </a>
+                  <a routerLink="/publicacoes" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Publicações</span>
+                      <span class="mega-link-desc">Relatórios e estudos</span>
+                    </div>
+                  </a>
+                  <a routerLink="/galeria-fotos" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Galerias</span>
+                      <span class="mega-link-desc">Fotos</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+
+              <div class="mega-column">
+                <h3 class="mega-title">Multimédia</h3>
+                <div class="mega-links">
+                  <a routerLink="/galeria-videos" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Vídeos</span>
+                      <span class="mega-link-desc">Tutoriais e reportagens</span>
+                    </div>
+                  </a>
+                  <a routerLink="/podcasts" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Podcasts</span>
+                      <span class="mega-link-desc">Conversas sobre agricultura</span>
+                    </div>
+                  </a>
+                  <a routerLink="/boletins" class="mega-link">
+                    <div class="mega-link-content">
+                      <span class="mega-link-title">Boletins</span>
+                      <span class="mega-link-desc">Informações regulares</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+
+              <div class="mega-feature">
+                <div class="feature-card">
+                  <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                  <h4>App IDA Mobile</h4>
+                  <p>Aceda a todos os conteúdos através da nossa aplicação móvel</p>
+                  <a routerLink="/app-download" class="feature-link">Download →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+         
+      </nav>
+
+      <!-- Botões Desktop -->
+      <div class="nav-buttons">
+        <a routerLink="/eventos" class="nav-btn secondary">
+          Eventos Agro
+        </a>
+
+        <a routerLink="/login" class="nav-btn primary">
+          Área Restrita
+        </a>
+      </div>
+
+      <!-- Mobile Menu Toggle -->
+      <div class="mobile-toggle">
+        <button class="menu-toggle" (click)="toggleMobileMenu()">
+          <span class="menu-icon"><i class="fas fa-bars"></i></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation -->
+  <div class="mobile-nav" [class.active]="mobileMenuOpen">
+    <div class="mobile-nav-content">
+      <nav class="mobile-nav-items">
+        <!-- Mobile Menu Items -->
+        <a routerLink="/" class="mobile-nav-item" (click)="closeMobileMenu()">
+          Início
+        </a>
+
+        <!-- Sobre IDA com Submenu Mobile -->
+        <div class="mobile-dropdown">
+          <button class="mobile-nav-item dropdown-toggle" (click)="toggleMobileSubmenu('sobre-mobile')">
+            Sobre o IDA
+            <span class="dropdown-arrow-mobile" [class.rotated]="mobileSubmenus['sobre-mobile']">▼</span>
+          </button>
+
+          <div class="mobile-dropdown-content" [class.active]="mobileSubmenus['sobre-mobile']">
+            <a routerLink="/estatuto-organico" class="mobile-dropdown-item" (click)="closeMobileMenu()">
+              Estatuto Orgânico
+            </a>
+            <a routerLink="/organigrama" class="mobile-dropdown-item" (click)="closeMobileMenu()">
+              Organigrama
+            </a>
+            <a routerLink="/sobre-ministerio" class="mobile-dropdown-item" (click)="closeMobileMenu()">
+              Sobre o Ministério
+            </a>
+            <a routerLink="/perfil-titular" class="mobile-dropdown-item" (click)="closeMobileMenu()">
+              Perfil do Titular
+            </a>
+          </div>
+        </div>
+
+        <!-- Programas com Submenu Mobile -->
+        <div class="mobile-dropdown">
+          <button class="mobile-nav-item dropdown-toggle" (click)="toggleMobileSubmenu('programas-mobile')">
+            Programas
+            <span class="dropdown-arrow-mobile" [class.rotated]="mobileSubmenus['programas-mobile']">▼</span>
+          </button>
+
+          <div class="mobile-dropdown-content" [class.active]="mobileSubmenus['programas-mobile']">
+            <a routerLink="/programas-agricolas" class="mobile-dropdown-item" (click)="closeMobileMenu()">
+              Programas Agrícolas
+            </a>
+            <a routerLink="/desenvolvimento-rural" class="mobile-dropdown-item" (click)="closeMobileMenu()">
+              Desenvolvimento Rural
+            </a>
+            <a routerLink="/investimento-agrario" class="mobile-dropdown-item" (click)="closeMobileMenu()">
+              Investimento Agrário
+            </a>
+          </div>
+        </div>
+
+        <!-- Outros links mobile -->
+        <a routerLink="/projectos" class="mobile-nav-item" (click)="closeMobileMenu()">
+          Projectos
+        </a>
+
+        <a routerLink="/parceiros" class="mobile-nav-item" (click)="closeMobileMenu()">
+          Parceiros
+        </a>
+
+        <!-- Mídias com Submenu Mobile -->
+        <div class="mobile-dropdown">
+          <button class="mobile-nav-item dropdown-toggle" (click)="toggleMobileSubmenu('midias-mobile')">
+            Mídias
+            <span class="dropdown-arrow-mobile" [class.rotated]="mobileSubmenus['midias-mobile']">▼</span>
+          </button>
+
+          <div class="mobile-dropdown-content" [class.active]="mobileSubmenus['midias-mobile']">
+            <a routerLink="/publicacoes" class="mobile-dropdown-item" (click)="closeMobileMenu()">
+              Publicações
+            </a>
+            <a routerLink="/galerias" class="mobile-dropdown-item" (click)="closeMobileMenu()">
+              Galerias
+            </a>
+            <a routerLink="/noticias" class="mobile-dropdown-item" (click)="closeMobileMenu()">
+              Notícias
+            </a>
+          </div>
+        </div>
+
+        <a routerLink="/eventos" class="mobile-nav-item" (click)="closeMobileMenu()">
+          Eventos Agro
+        </a>
+
+      </nav>
+
+      <!-- Botões Mobile -->
+      <div class="mobile-buttons">
+        <a routerLink="/login" class="mobile-btn primary" (click)="closeMobileMenu()">
+          Área Restrita
+        </a>
+      </div>
+    </div>
+  </div>
+</header>

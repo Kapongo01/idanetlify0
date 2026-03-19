@@ -1,0 +1,464 @@
+<!-- Hero Section -->
+<section class="projects-hero">
+  <div class="hero-background">
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">Eventos Agrícolas</h1>
+      <p class="hero-subtitle">Feiras, congressos, workshops e dias de campo para impulsionar o agronegócio angolano</p>
+
+      <!-- Quick Stats -->
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number">{{ eventos.length }}</div>
+          <div class="stat-label">Eventos</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ contarProximosEventos() }}</div>
+          <div class="stat-label">Próximos</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ contarParticipantes() }}</div>
+          <div class="stat-label">Participantes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ contarCidades() }}</div>
+          <div class="stat-label">Cidades</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Search and Filters Section -->
+<section class="filters-section">
+  <div class="container">
+    <div class="filters-container">
+
+      <!-- Search Bar -->
+      <div class="search-box">
+        <div class="search-icon"><i class="fas fa-magnifying-glass"></i></div>
+        <input type="text" [(ngModel)]="searchTerm" placeholder="Pesquisar eventos..." class="search-input"
+          (input)="aplicarFiltros()">
+        <button class="search-btn" (click)="clearFilters()">Limpar</button>
+      </div>
+
+      <!-- Filters Row -->
+      <div class="filters-row">
+
+        <!-- Category Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Categoria</label>
+          <select [(ngModel)]="selectedCategory" class="filter-select" (change)="aplicarFiltros()">
+            <option value="all"><i class="fas fa-bullseye"></i> Todas as Categorias</option>
+            <option value="feira">Feira</option>
+            <option value="congresso">Congresso</option>
+            <option value="workshop">Workshop</option>
+            <option value="curso">Curso</option>
+            <option value="dia-campo">Dia de Campo</option>
+            <option value="seminario">Seminário</option>
+          </select>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Status</label>
+          <select [(ngModel)]="selectedStatus" class="filter-select" (change)="aplicarFiltros()">
+            <option value="all"><i class="fas fa-calendar-day"></i> Período Todos</option>
+            <option value="proximo">Próximos</option>
+            <option value="decorrer"><i class="fas fa-bullseye"></i> Em Curso</option>
+            <option value="realizado">Realizados</option>
+            <option value="cancelado">Cancelados</option>
+          </select>
+        </div>
+
+        <!-- Location Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Localização</label>
+          <select [(ngModel)]="selectedLocation" class="filter-select" (change)="aplicarFiltros()">
+            <option value="all">Todas as Localizações</option>
+            <option *ngFor="let location of locations" [value]="location">{{ location }}</option>
+          </select>
+        </div>
+
+        <!-- Sort Options -->
+        <div class="filter-group">
+          <label class="filter-label">Ordenar por</label>
+          <select [(ngModel)]="sortBy" class="filter-select" (change)="aplicarFiltros()">
+            <option value="proximos"><i class="fas fa-calendar-day"></i> Período Próximos Primeiro</option>
+            <option value="recentes">Mais Recentes</option>
+            <option value="titulo">Título A-Z</option>
+            <option value="participantes"><i class="fas fa-users"></i> Mais Participantes</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Active Filters -->
+      <div class="active-filters"
+        *ngIf="selectedCategory !== 'all' || selectedStatus !== 'all' || selectedLocation !== 'all'">
+        <span class="filters-label">Filtros activos:</span>
+
+        <span *ngIf="selectedCategory !== 'all'" class="filter-tag">
+          {{ getCategoryIcon(selectedCategory) }} {{ getCategoryLabel(selectedCategory) }}
+          <button (click)="selectedCategory = 'all'; aplicarFiltros()">×</button>
+        </span>
+
+        <span *ngIf="selectedStatus !== 'all'" class="filter-tag">
+          {{ getStatusIcon(selectedStatus) }} {{ getStatusLabel(selectedStatus) }}
+          <button (click)="selectedStatus = 'all'; aplicarFiltros()">×</button>
+        </span>
+
+        <span *ngIf="selectedLocation !== 'all'" class="filter-tag">
+          <i class="fas fa-map-marker-alt"></i> {{ selectedLocation }}
+          <button (click)="selectedLocation = 'all'; aplicarFiltros()">×</button>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Events Grid Section -->
+<section class="projects-grid-section">
+  <div class="container">
+
+    <!-- Results Header -->
+    <div class="results-header">
+      <h2 class="results-title">
+        {{ eventosFiltrados.length }} Event{{ eventosFiltrados.length !== 1 ? 'os' : 'o' }} Encontrado{{
+        eventosFiltrados.length !== 1 ? 's' : '' }}
+      </h2>
+      <div class="results-actions">
+        <button class="export-btn" (click)="exportarCalendario()">
+          <i class="fas fa-calendar-day"></i> Período Exportar Calendário
+        </button>
+        <button class="export-btn" (click)="alternarVista()" style="margin-left: 10px;">
+          <ng-container *ngIf="vistaCalendario; else lista">
+            <i class="fas fa-clipboard-list"></i> Vista em Lista
+          </ng-container>
+          <ng-template #lista>
+            <i class="fas fa-calendar-day"></i> Período Vista em Calendário
+          </ng-template>
+        </button>
+      </div>
+    </div>
+
+    <!-- Vista em Calendário -->
+    <div *ngIf="vistaCalendario" class="calendario-view">
+      <div class="calendario-header">
+        <button class="btn-navegar" (click)="mesAnterior()">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <h3 class="calendario-mes-title">{{ mesAtual | date:'MMMM yyyy' | titlecase }}</h3>
+
+        <button class="btn-navegar" (click)="proximoMes()">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <div class="calendario-grid">
+        <div class="dia-semana" *ngFor="let dia of diasSemana">{{ dia }}</div>
+
+        <div *ngFor="let dia of diasCalendario" class="dia-calendario" [class.fora-mes]="!dia.doMes"
+          [class.hoje]="dia.hoje" [class.com-eventos]="dia.eventos.length > 0">
+
+          <div class="dia-numero">{{ dia.data | date:'d' }}</div>
+
+          <div class="eventos-dia">
+            <div *ngFor="let evento of dia.eventos" class="evento-marcador" [class]="evento.categoria"
+              (click)="openEventModal(evento)" [title]="evento.titulo">
+              ●
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vista em Lista -->
+    <div *ngIf="!vistaCalendario" class="projects-grid">
+      <div *ngFor="let evento of eventosFiltrados" class="project-card" (click)="openEventModal(evento)">
+
+        <!-- Event Image -->
+        <div class="project-image">
+          <img [src]="evento.imagem" [alt]="evento.titulo" class="project-img">
+          <div class="project-overlay"></div>
+
+          <!-- Status Badge -->
+          <div class="status-badge" [class]="'status-' + getStatusColor(evento.status)">
+            <i [class]="getStatusIcon(evento.status) "></i>
+            {{ getStatusLabel(evento.status) }}
+          </div>
+
+          <!-- Registration Progress -->
+          <div class="progress-bar" *ngIf="evento.status === 'proximo' || evento.status === 'decorrer'">
+            <div class="progress-fill" [style.width.%]="getRegistrationPercentage(evento)"></div>
+            <span class="progress-text">{{ evento.inscritos }}/{{ evento.vagas }} vagas</span>
+          </div>
+        </div>
+
+        <!-- Event Content -->
+        <div class="project-content">
+
+          <!-- Category -->
+          <div class="project-category">
+            <span class="category-icon"><i [class]="getCategoryIcon(evento.categoria)"></i></span>
+            {{ getCategoryLabel(evento.categoria) }}
+          </div>
+
+          <!-- Title -->
+          <h3 class="project-title">{{ evento.titulo }}</h3>
+
+          <!-- Description -->
+          <p class="project-description">{{ evento.descricao }}</p>
+
+          <!-- Event Meta -->
+          <div class="project-meta">
+            <div class="meta-item">
+              <span class="meta-icon"><i class="fas fa-map-marker-alt"></i></span>
+              <span class="meta-text">{{ evento.online ? 'Online' : evento.local }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-icon"><i class="fas fa-users"></i></span>
+              <span class="meta-text">{{ evento.inscritos }} inscritos</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-icon"><i class="fas fa-money-bill-wave"></i></span>
+              <span class="meta-text">{{ evento.investimento }}</span>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="project-timeline">
+            <div class="timeline-item">
+              <span class="timeline-label">Início</span>
+              <span class="timeline-date">{{ evento.dataInicio | date:'dd/MM' }}</span>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-label">Fim</span>
+              <span class="timeline-date">{{ evento.dataFim | date:'dd/MM' }}</span>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-label">Hora</span>
+              <span class="timeline-date">{{ evento.dataInicio | date:'HH:mm' }}</span>
+            </div>
+          </div>
+
+          <!-- View Details -->
+          <div class="project-actions">
+            <button class="view-details-btn">
+              <ng-container *ngIf="evento.inscrito; else inscrever">
+                <i class="fas fa-circle-check text-green-500"></i> Inscrito
+              </ng-container>
+
+              <ng-template #inscrever>
+                <i class="fas fa-bullseye"></i> Inscrever-se
+              </ng-template>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- No Results -->
+    <div *ngIf="eventosFiltrados.length === 0 && !vistaCalendario" class="no-results">
+      <div class="no-results-icon"><i class="fas fa-magnifying-glass"></i></div>
+      <h3>Nenhum evento encontrado</h3>
+      <p>Tente ajustar os filtros ou termos de pesquisa</p>
+      <button class="clear-filters-btn" (click)="clearFilters()">
+        Limpar Todos os Filtros
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="projects-cta">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="cta-title">Organiza um Evento?</h2>
+      <p class="cta-description">
+        Partilhe o seu evento connosco e alcance milhares de profissionais
+        do sector agrícola em Angola e além fronteiras.
+      </p>
+      <div class="cta-actions">
+        <button class="cta-btn primary" (click)="sugerirEvento()">
+          <i class="fas fa-bullseye"></i> Sugerir Evento
+        </button>
+        <a href="/contactos" class="cta-btn secondary">
+          <i class="fas fa-phone"></i>Falar com a Equipa
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Event Modal -->
+<div *ngIf="selectedEvent" class="modal-overlay" (click)="closeEventModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">{{ selectedEvent.titulo }}</h2>
+      <button class="modal-close" (click)="closeEventModal()">×</button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+
+      <!-- Event Gallery -->
+      <div class="modal-gallery">
+        <img [src]="selectedEvent.imagem" [alt]="selectedEvent.titulo" class="main-image">
+        <div class="gallery-thumbnails" *ngIf="selectedEvent.galeria.length > 0">
+          <img *ngFor="let img of selectedEvent.galeria" [src]="img" class="thumbnail">
+        </div>
+      </div>
+
+      <!-- Event Details -->
+      <div class="modal-details">
+
+        <!-- Status and Registration -->
+        <div class="detail-section">
+          <div class="detail-row">
+            <div class="detail-item">
+              <span class="detail-label">Status</span>
+              <span class="detail-value status-badge" [class]="'status-' + getStatusColor(selectedEvent.status)">
+                <i [class]="getStatusIcon(selectedEvent.status)"></i>
+                {{ getStatusLabel(selectedEvent.status) }}
+              </span>
+            </div>
+            <div class="detail-item" *ngIf="selectedEvent.status === 'proximo' || selectedEvent.status === 'decorrer'">
+              <span class="detail-label">Inscrições</span>
+              <div class="progress-container">
+                <div class="progress-bar">
+                  <div class="progress-fill" [style.width.%]="getRegistrationPercentage(selectedEvent)"></div>
+                </div>
+                <span class="progress-text">{{ selectedEvent.inscritos }}/{{ selectedEvent.vagas }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Basic Info -->
+        <div class="detail-section">
+          <h4>Informações do Evento</h4>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label"><i class="fas fa-calendar-day"></i> Período Data e Hora</span>
+              <span class="detail-value">
+                {{ selectedEvent.dataInicio | date:'dd/MM/yyyy HH:mm' }} -
+                {{ selectedEvent.dataFim | date:'dd/MM/yyyy HH:mm' }}
+              </span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label"><i class="fas fa-map-marker-alt"></i> Localização</span>
+              <span class="detail-value">
+                <ng-container *ngIf="selectedEvent.online; else presencial">
+                  <i class="fas fa-globe"></i> Evento Online
+                </ng-container>
+                <ng-template #presencial>
+                  {{ selectedEvent.local }}
+                </ng-template>
+              </span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label"><i class="fas fa-bullseye"></i> Categoria</span>
+              <span class="detail-value">
+                <i [class]=" getCategoryIcon(selectedEvent.categoria) "></i>
+                {{ getCategoryLabel(selectedEvent.categoria) }}
+              </span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label"><i class="fas fa-money-bill-wave"></i> Investimento</span>
+              <span class="detail-value">{{ selectedEvent.investimento }}</span>
+            </div>
+            <div class="detail-item" *ngIf="selectedEvent.organizador">
+              <span class="detail-label"><i class="fas fa-building"></i> Organizador</span>
+              <span class="detail-value">{{ selectedEvent.organizador }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label"><i class="fas fa-users"></i> Vagas</span>
+              <span class="detail-value">{{ selectedEvent.vagas }} participantes</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="detail-section">
+          <h4>Descrição</h4>
+          <p class="project-full-description">{{ selectedEvent.descricaoCompleta }}</p>
+        </div>
+
+        <!-- Program -->
+        <div class="detail-section" *ngIf="selectedEvent.programa.length > 0">
+          <h4>Programa</h4>
+          <div class="programa-list">
+            <div *ngFor="let item of selectedEvent.programa" class="programa-item">
+              <div class="programa-hora">{{ item.hora }}</div>
+              <div class="programa-detalhes">
+                <strong>{{ item.titulo }}</strong>
+                <span *ngIf="item.palestrante">por {{ item.palestrante }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Speakers -->
+        <div class="detail-section" *ngIf="selectedEvent.palestrantes.length > 0">
+          <h4>Palestrantes</h4>
+          <div class="palestrantes-grid">
+            <div *ngFor="let palestrante of selectedEvent.palestrantes" class="palestrante-card">
+              <img [src]="palestrante.foto" [alt]="palestrante.nome" class="palestrante-foto">
+              <div class="palestrante-info">
+                <strong>{{ palestrante.nome }}</strong>
+                <span>{{ palestrante.cargo }}</span>
+                <span class="palestrante-empresa">{{ palestrante.empresa }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Partners -->
+        <div class="detail-section" *ngIf="selectedEvent.parceiros.length > 0">
+          <h4>Parceiros</h4>
+          <div class="partners-list">
+            <span *ngFor="let parceiro of selectedEvent.parceiros" class="partner-tag">
+              {{ parceiro }}
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button class="btn secondary" (click)="closeEventModal()">Fechar</button>
+      <button class="btn primary" *ngIf="selectedEvent.status === 'proximo' || selectedEvent.status === 'decorrer'"
+        (click)="inscreverEvento(selectedEvent)"
+        [disabled]="selectedEvent.inscrito || selectedEvent.inscritos >= selectedEvent.vagas">
+
+        <ng-container *ngIf="selectedEvent.inscrito; else inscrever">
+          <i class="fas fa-circle-check text-green-500"></i> Inscrito
+        </ng-container>
+
+        <ng-template #inscrever>
+          <i class="fas fa-bullseye"></i> Inscrever-se
+        </ng-template>
+      </button>
+      <button class="btn primary" (click)="compartilharEvento(selectedEvent)">
+        <i class="fas fa-link"></i> Compartilhar
+      </button>
+      <button class="btn primary" *ngIf="selectedEvent.linkEvento" (click)="acessarEvento(selectedEvent)">
+        <i class="fas fa-globe"></i> Acessar Evento
+      </button>
+    </div>
+
+  </div>
+</div>

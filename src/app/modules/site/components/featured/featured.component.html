@@ -1,0 +1,76 @@
+<section class="features-section">
+  <div class="container">
+
+    <!-- Header Section -->
+    <div class="features-header">
+      <div class="header-badge">
+        <span class="badge-icon">
+  <i class="fas fa-star"></i>
+</span>
+        <span class="badge-text">Nossas Áreas de Atuação</span>
+      </div>
+
+      <h2 class="section-title">
+        Transformando o Campo com
+        <span class="title-highlight">Soluções Integradas</span>
+      </h2>
+
+      <p class="section-description">
+        Desenvolvemos programas e iniciativas que atendem às necessidades específicas
+        do setor agrícola, promovendo crescimento sustentável e qualidade de vida no campo.
+      </p>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="features-grid">
+      <div
+        *ngFor="let feature of features"
+        class="feature-card"
+        [class.feature-active]="selectedFeature?.id === feature.id"
+        (click)="selectFeature(feature)">
+
+        <!-- Feature Icon -->
+        <div class="feature-icon-wrapper">
+          <div
+            class="feature-icon"
+            [style.background]="getIconGradient(feature.gradient)">
+            <span class="icon-emoji"><i [class]="feature.icon"></i></span>
+          </div>
+        </div>
+
+        <!-- Feature Content -->
+        <div class="feature-content">
+          <h3 class="feature-title">{{ feature.title }}</h3>
+          <p class="feature-description">{{ feature.description }}</p>
+
+          <!-- Feature Highlights -->
+          <div
+            class="feature-highlights"
+            [class.show-highlights]="selectedFeature?.id === feature.id">
+            <div class="highlights-list">
+              <div
+                *ngFor="let highlight of feature.highlights"
+                class="highlight-item">
+                <span class="highlight-bullet">✓</span>
+                <span class="highlight-text">{{ highlight }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Read More Indicator -->
+          <div class="read-more">
+            <span class="read-more-text">
+              {{ selectedFeature?.id === feature.id ? 'Ver menos' : 'Saiba mais' }}
+            </span>
+            <span
+              class="read-more-arrow"
+              [class.arrow-up]="selectedFeature?.id === feature.id">
+
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

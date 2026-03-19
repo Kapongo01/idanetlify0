@@ -1,0 +1,106 @@
+<!-- Hero Section -->
+<section class="podcast-hero">
+  <div
+    class="hero-background"
+    [style.background-image]="'url(' + pageData.hero.backgroundImage + ')'"
+  >
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">{{ pageData.hero.title }}</h1>
+      <p class="hero-subtitle">{{ pageData.hero.subtitle }}</p>
+    </div>
+  </div>
+</section>
+
+<!-- Categories Filter -->
+<nav class="categories-nav">
+  <button
+    *ngFor="let category of categories"
+    class="category-btn"
+    [class.active]="selectedCategory === category.value"
+    (click)="selectedCategory = category.value"
+  >
+    <i [class]="category.icon"></i> {{ category.label }}
+  </button>
+</nav>
+
+<!-- Media Grid -->
+<div class="media-grid container">
+<div
+  class="media-card"
+  *ngFor="let item of filteredMedia"
+  [ngClass]="item.type === 'video' ? 'video-card' : 'podcast-card'"
+>
+    <div class="card-media">
+      <!-- Podcast com imagem -->
+      <img
+        *ngIf="item.type === 'podcast'"
+        [src]="item.imageUrl"
+        alt="{{ item.title }}"
+      />
+      <!-- Vídeo incorporado -->
+      <iframe
+        *ngIf="item.type === 'video' && item.videoUrl"
+        [src]="getSafeVideoUrl(item.videoUrl)"
+        frameborder="0"
+        allowfullscreen
+      >
+      </iframe>
+    </div>
+
+    <div class="card-header">
+      <span class="card-category">
+        <i [class]="getCategoryInfo(item.category).icon"></i>
+        {{ getCategoryInfo(item.category).label }}
+      </span>
+      <span class="card-date">{{ item.date }}</span>
+    </div>
+
+    <h3 class="card-title">{{ item.title }}</h3>
+    <p class="card-description">{{ item.description }}</p>
+
+    <div class="card-actions">
+      <button class="action-btn" (click)="playMedia(item)">
+        <i class="fas fa-play"></i>
+        {{ item.type === "podcast" ? "Ouvir" : "Assistir" }}
+      </button>
+      <button class="action-btn" (click)="downloadMedia(item)">
+        <i class="fas fa-download"></i> Download
+      </button>
+    </div>
+
+    <div class="media-stats">
+      <span><i class="fas fa-eye"></i> {{ item.views }}</span>
+      <span><i class="fas fa-heart"></i> {{ item.likes }}</span>
+      <span><i class="fas fa-download"></i> {{ item.downloads }}</span>
+    </div>
+  </div>
+</div>
+
+<section class="podcast-cta">
+  <div class="cta-container">
+    <div class="cta-content">
+      <h2 class="cta-title">Não perca nenhum episódio</h2>
+
+      <p class="cta-text">
+        Inscreva-se no nosso boletim ou siga os nossos canais para acompanhar
+        entrevistas, debates e conteúdos exclusivos sobre o desenvolvimento
+        agrário.
+      </p>
+
+      <div class="cta-buttons">
+        <button class="cta-btn primary">
+          <i class="fas fa-envelope"></i>
+          Inscrever-se no Boletim
+        </button>
+
+        <button class="cta-btn secondary">
+          <i class="fas fa-podcast"></i>
+          Ver Todos os Podcasts
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

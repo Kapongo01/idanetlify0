@@ -1,0 +1,103 @@
+<section class="initiatives-section" id="sobre-ida">
+  <div class="container">
+    <!-- Header Section -->
+    <div class="initiatives-header">
+      <h2 class="section-title">Sobre o IDA</h2>
+      <p class="section-description">
+        Conheça o Instituto de Desenvolvimento Agrário e os princípios que
+        norteiam a nossa ação no desenvolvimento rural angolano
+      </p>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="initiatives-content">
+      <!-- Image Column - Cobrindo toda a altura -->
+      <div class="image-column">
+        <div class="image-wrapper">
+          <img
+            [src]="initiativesData.image.url"
+            [alt]="initiativesData.image.alt"
+            class="initiative-image"
+          />
+          <div class="image-overlay"></div>
+
+          <!-- Stats Overlay -->
+          <div class="stats-overlay">
+            <div class="stats-content">
+              <h3 class="stats-title">O IDA em Números</h3>
+              <p class="stats-description">
+                Impacto real no desenvolvimento agrário de Angola
+              </p>
+
+              <div class="stats-grid">
+                <div
+                  *ngFor="let stat of initiativesData.stats"
+                  class="stat-item"
+                >
+                  <div class="stat-number">{{ stat.number }}</div>
+                  <div class="stat-label">{{ stat.label }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Initiatives Column - Cards 2x2 -->
+      <div class="initiatives-column">
+        <div class="initiatives-grid">
+          <div
+            *ngFor="let initiative of initiativesData.initiatives"
+            class="initiative-card"
+            [class.initiative-active]="activeInitiative === initiative.id"
+            (click)="setActiveInitiative(initiative.id)"
+          >
+            <!-- Initiative Header -->
+            <div class="initiative-header">
+              <div class="initiative-icon">
+                <span class="icon-emoji"
+                  ><i [class]="initiative.icon"></i
+                ></span>
+              </div>
+
+              <div class="initiative-title-wrapper">
+                <h3 class="initiative-title">{{ initiative.title }}</h3>
+                <div
+                  class="status-badge"
+                  [class]="'status-' + getStatusColor(initiative.status)"
+                >
+                  {{ getStatusBadge(initiative.status) }}
+                </div>
+              </div>
+
+              <div class="initiative-arrow">
+                <span class="arrow-icon">→</span>
+              </div>
+            </div>
+
+            <!-- Initiative Description -->
+            <p class="initiative-description">
+              {{ initiative.description }}
+            </p>
+
+            <!-- Initiative Features -->
+            <div
+              class="initiative-features"
+              [class.show-features]="activeInitiative === initiative.id"
+            >
+              <div class="features-list">
+                <div
+                  *ngFor="let feature of initiative.features"
+                  class="feature-item"
+                >
+                  <span class="feature-bullet">•</span>
+                  <span class="feature-text">{{ feature }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,449 @@
+<!-- Hero Section -->
+<section class="projects-hero">
+  <div class="hero-background">
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">Publicações Técnicas</h1>
+      <p class="hero-subtitle">
+        Acesso a pesquisas, manuais e guias técnicos para o desenvolvimento
+        agrícola
+      </p>
+
+      <!-- Quick Stats -->
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number">{{ publicacoes.length }}</div>
+          <div class="stat-label">Publicações</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ contarAutores() }}</div>
+          <div class="stat-label">Especialistas</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ contarCategorias() }}</div>
+          <div class="stat-label">Categorias</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ contarDownloads() }}</div>
+          <div class="stat-label">Downloads</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Search and Filters Section -->
+<section class="filters-section">
+  <div class="container">
+    <div class="filters-container">
+      <!-- Search Bar -->
+      <div class="search-box">
+        <div class="search-icon">
+          <i class="fas fa-search"></i>
+        </div>
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Pesquisar publicações..."
+          class="search-input"
+          (input)="aplicarFiltros()"
+        />
+        <button class="search-btn" (click)="clearFilters()">Limpar</button>
+      </div>
+
+      <!-- Filters Row -->
+      <div class="filters-row">
+        <!-- Category Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Categoria</label>
+          <select
+            [(ngModel)]="selectedCategory"
+            class="filter-select"
+            (change)="aplicarFiltros()"
+          >
+            <option value="all">Todas as Categorias</option>
+            <option value="culturas">Culturas</option>
+            <option value="solo">Manejo do Solo</option>
+            <option value="irrigacao">Irrigação</option>
+            <option value="defensivos">Defensivos Agrícolas</option>
+            <option value="tecnologia">Tecnologia</option>
+          </select>
+        </div>
+
+        <!-- Type Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Tipo</label>
+          <select
+            [(ngModel)]="selectedType"
+            class="filter-select"
+            (change)="aplicarFiltros()"
+          >
+            <option value="all">Todos os Tipos</option>
+            <option value="manual">Manual</option>
+            <option value="pesquisa">Pesquisa</option>
+            <option value="guia">Guia</option>
+            <option value="relatorio">Relatório</option>
+          </select>
+        </div>
+
+        <!-- Year Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Ano</label>
+          <select
+            [(ngModel)]="selectedYear"
+            class="filter-select"
+            (change)="aplicarFiltros()"
+          >
+            <option value="all">Todos os Anos</option>
+            <option *ngFor="let year of years" [value]="year">
+              {{ year }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Sort Options -->
+        <div class="filter-group">
+          <label class="filter-label">Ordenar por</label>
+          <select
+            [(ngModel)]="sortBy"
+            class="filter-select"
+            (change)="aplicarFiltros()"
+          >
+            <option value="recentes">Mais Recentes</option>
+            <option value="antigos">Mais Antigos</option>
+            <option value="titulo">Título A-Z</option>
+            <option value="downloads">⬇ Mais Downloads</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Active Filters -->
+      <div
+        class="active-filters"
+        *ngIf="
+          selectedCategory !== 'all' ||
+          selectedType !== 'all' ||
+          selectedYear !== 'all'
+        "
+      >
+        <span class="filters-label">Filtros activos:</span>
+
+        <span *ngIf="selectedCategory !== 'all'" class="filter-tag">
+          {{ getCategoryIcon(selectedCategory) }}
+          {{ getCategoryLabel(selectedCategory) }}
+          <button (click)="selectedCategory = 'all'; aplicarFiltros()">
+            ×
+          </button>
+        </span>
+
+        <span *ngIf="selectedType !== 'all'" class="filter-tag">
+          {{ getTypeIcon(selectedType) }} {{ getTypeLabel(selectedType) }}
+          <button (click)="selectedType = 'all'; aplicarFiltros()">×</button>
+        </span>
+
+        <span *ngIf="selectedYear !== 'all'" class="filter-tag">
+          {{ selectedYear }}
+          <button (click)="selectedYear = 'all'; aplicarFiltros()">×</button>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Publications Grid Section -->
+<section class="projects-grid-section">
+  <div class="container">
+    <!-- Results Header -->
+    <div class="results-header">
+      <h2 class="results-title">
+        {{ publicacoesFiltradas.length }} Publicaç{{
+          publicacoesFiltradas.length !== 1 ? "ões" : "ão"
+        }}
+        Encontrada{{ publicacoesFiltradas.length !== 1 ? "s" : "" }}
+      </h2>
+      <div class="results-actions">
+        <button class="export-btn" (click)="exportarLista()">
+          <i class="fas fa-chart-bar"></i> Exportar Lista
+        </button>
+      </div>
+    </div>
+
+    <!-- Publications Grid -->
+    <div class="projects-grid">
+      <div
+        *ngFor="let publicacao of publicacoesFiltradas"
+        class="project-card"
+        (click)="openPublicationModal(publicacao)"
+      >
+        <!-- Publication Image -->
+        <div class="project-image">
+          <img
+            [src]="publicacao.imagem"
+            [alt]="publicacao.titulo"
+            class="project-img"
+          />
+          <div class="project-overlay"></div>
+
+          <!-- Type Badge -->
+          <div class="status-badge status-green">
+            {{ getTypeIcon(publicacao.tipo) }}
+            {{ getTypeLabel(publicacao.tipo) }}
+          </div>
+
+          <!-- Downloads Counter -->
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              [style.width.%]="getDownloadPercentage(publicacao)"
+            ></div>
+            <span class="progress-text"
+              >{{ publicacao.downloads }} downloads</span
+            >
+          </div>
+        </div>
+
+        <!-- Publication Content -->
+        <div class="project-content">
+          <!-- Category -->
+          <div class="project-category">
+            <span class="category-icon">{{
+              getCategoryIcon(publicacao.categoria)
+            }}</span>
+            {{ getCategoryLabel(publicacao.categoria) }}
+          </div>
+
+          <!-- Title -->
+          <h3 class="project-title">{{ publicacao.titulo }}</h3>
+
+          <!-- Description -->
+          <p class="project-description">{{ publicacao.resumo }}</p>
+
+          <!-- Publication Meta -->
+          <div class="project-meta">
+            <div class="meta-item">
+              <span class="meta-icon"><i class="fas fa-user"></i></span>
+              <span class="meta-text">{{ publicacao.autor }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-icon"><i class="fas fa-calendar-alt"></i></span>
+              <span class="meta-text">{{
+                publicacao.dataPublicacao | date: "MMM y"
+              }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-icon"><i class="fas fa-ruler"></i></span>
+              <span class="meta-text">{{ publicacao.paginas }} páginas</span>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="project-timeline">
+            <div class="timeline-item">
+              <span class="timeline-label">Publicação</span>
+              <span class="timeline-date">{{
+                publicacao.dataPublicacao | date: "MMM y"
+              }}</span>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-label">Downloads</span>
+              <span class="timeline-date">{{ publicacao.downloads }}</span>
+            </div>
+          </div>
+
+          <!-- View Details -->
+          <div class="project-actions">
+            <button class="view-details-btn">Ver Detalhes →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Results -->
+    <div *ngIf="publicacoesFiltradas.length === 0" class="no-results">
+      <div class="no-results-icon"><i class="fas fa-magnifying-glass"></i></div>
+      <h3>Nenhuma publicação encontrada</h3>
+      <p>Tente ajustar os filtros ou termos de pesquisa</p>
+      <button class="clear-filters-btn" (click)="clearFilters()">
+        Limpar Todos os Filtros
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="projects-cta">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="cta-title">Tem uma Publicação para Partilhar?</h2>
+      <p class="cta-description">
+        Contribua com a nossa biblioteca técnica partilhando pesquisas, estudos
+        e manuais que possam beneficiar a comunidade agrícola angolana.
+      </p>
+      <div class="cta-actions">
+        <a href="/partilhar-publicacao" class="cta-btn primary">
+          <i class="fas fa-book"></i> Partilhar Publicação
+        </a>
+        <a href="/contactos" class="cta-btn secondary">
+          <i class="fas fa-phone"></i> Falar com a Equipa
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Publication Modal -->
+<div
+  *ngIf="selectedPublication"
+  class="modal-overlay"
+  (click)="closePublicationModal()"
+>
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">{{ selectedPublication.titulo }}</h2>
+      <button class="modal-close" (click)="closePublicationModal()">×</button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <!-- Publication Gallery -->
+      <div class="modal-gallery">
+        <img
+          [src]="selectedPublication.imagem"
+          [alt]="selectedPublication.titulo"
+          class="main-image"
+        />
+        <div
+          class="gallery-thumbnails"
+          *ngIf="selectedPublication.galeria.length > 0"
+        >
+          <img
+            *ngFor="let img of selectedPublication.galeria"
+            [src]="img"
+            class="thumbnail"
+          />
+        </div>
+      </div>
+
+      <!-- Publication Details -->
+      <div class="modal-details">
+        <!-- Type and Downloads -->
+        <div class="detail-section">
+          <div class="detail-row">
+            <div class="detail-item">
+              <span class="detail-label">Tipo</span>
+              <span class="detail-value status-badge status-green">
+                {{ getTypeIcon(selectedPublication.tipo) }}
+                {{ getTypeLabel(selectedPublication.tipo) }}
+              </span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Downloads</span>
+              <div class="progress-container">
+                <div class="progress-bar">
+                  <div
+                    class="progress-fill"
+                    [style.width.%]="getDownloadPercentage(selectedPublication)"
+                  ></div>
+                </div>
+                <span class="progress-text">{{
+                  selectedPublication.downloads
+                }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Basic Info -->
+        <div class="detail-section">
+          <h4>Informações da Publicação</h4>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label"
+                ><i class="fas fa-user"></i> Autor</span
+              >
+              <span class="detail-value">{{ selectedPublication.autor }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label"
+                ><i class="fas fa-calendar-alt"></i> Publicação</span
+              >
+              <span class="detail-value">{{
+                selectedPublication.dataPublicacao | date: "dd/MM/yyyy"
+              }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label"
+                ><i class="fas fa-ruler"></i> Páginas</span
+              >
+              <span class="detail-value">{{
+                selectedPublication.paginas
+              }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label"
+                ><i class="fas fa-tag"></i> Categoria</span
+              >
+              <span class="detail-value">
+                <i [class]="getCategoryIcon(selectedPublication.categoria)"></i>
+                {{ getCategoryLabel(selectedPublication.categoria) }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <!-- Description -->
+        <div class="detail-section">
+          <h4>Resumo</h4>
+          <p class="project-full-description">
+            {{ selectedPublication.descricaoCompleta }}
+          </p>
+        </div>
+
+        <!-- Keywords -->
+        <div class="detail-section">
+          <h4>Palavras-chave</h4>
+          <div class="partners-list">
+            <span
+              *ngFor="let keyword of selectedPublication.palavrasChave"
+              class="partner-tag"
+            >
+              {{ keyword }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Download Info -->
+        <div class="detail-section">
+          <h4>Informações de Download</h4>
+          <ul class="objectives-list">
+            <li>Formato: {{ selectedPublication.formato }}</li>
+            <li>Tamanho: {{ selectedPublication.tamanho }}</li>
+            <li>Idioma: {{ selectedPublication.idioma }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+<!-- Modal Footer -->
+<div class="modal-footer">
+  <button class="btn secondary" (click)="closePublicationModal()">
+    Fechar
+  </button>
+  <button
+    class="btn primary"
+    (click)="baixarPublicacao(selectedPublication)"
+  >
+    <i class="fas fa-file-download"></i> Download PDF
+  </button>
+  <button
+    class="btn primary"
+    (click)="compartilharPublicacao(selectedPublication)"
+  >
+    <i class="fas fa-link"></i> Compartilhar
+  </button>
+</div>
+  </div>
+</div>

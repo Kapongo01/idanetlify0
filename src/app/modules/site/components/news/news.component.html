@@ -1,0 +1,206 @@
+<section class="news-section" id="noticias">
+  <div class="container">
+
+    <!-- Header Section -->
+    <div class="news-header">
+
+      <h2 class="section-title">
+        Últimas Notícias
+      </h2>
+
+      <p class="section-description">
+        {{ newsData.subtitle }}
+      </p>
+    </div>
+
+
+
+    <!-- Featured News -->
+    <div class="featured-news" *ngIf="featuredNews.length > 0">
+      <div class="featured-grid">
+        <div
+          *ngFor="let news of featuredNews"
+          class="featured-card"
+          [class.featured-expanded]="selectedNews?.id === news.id"
+          (click)="selectNews(news)">
+
+          <div class="featured-image">
+            <img [src]="news.image" [alt]="news.title" class="news-img">
+            <div class="featured-overlay"></div>
+            <div class="featured-badge">
+              <span class="badge-icon">
+  <i class="fas fa-star"></i>
+</span>
+              Destaque
+            </div>
+          </div>
+
+          <div class="featured-content">
+            <div class="news-meta">
+              <span
+                class="news-category"
+                [class]="'category-' + getCategoryColor(news.category)">
+                {{ getCategoryText(news.category) }}
+              </span>
+              <span class="news-date">{{ formatDate(news.date) }}</span>
+            </div>
+
+            <h3 class="news-title">{{ news.title }}</h3>
+            <p class="news-excerpt">{{ news.excerpt }}</p>
+
+            <div class="news-footer">
+              <span class="news-author">Por {{ news.author }}</span>
+              <span class="news-read-time">{{ news.readTime }} de leitura</span>
+            </div>
+
+            <!-- Expanded Content -->
+            <div
+              class="news-content"
+              [class.show-content]="selectedNews?.id === news.id">
+              <p class="news-full-content">{{ news.content }}</p>
+
+              <div class="news-tags">
+                <span
+                  *ngFor="let tag of news.tags"
+                  class="news-tag">
+                  #{{ tag }}
+                </span>
+              </div>
+
+              <div class="news-actions">
+                <button class="share-btn">
+                  <span class="btn-icon"><i class="fas fa-paper-plane"></i></span>
+                  Partilhar
+                </button>
+                <button class="read-btn">
+                  <span class="btn-icon"><i class="fas fa-book-open"></i></span>
+                  Ler Mais
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Regular News Grid -->
+    <div class="news-grid">
+      <div
+        *ngFor="let news of filteredNews"
+        class="news-card"
+        [class.news-expanded]="selectedNews?.id === news.id"
+        (click)="selectNews(news)">
+
+        <div class="news-image">
+          <img [src]="news.image" [alt]="news.title" class="news-img">
+          <div class="news-overlay"></div>
+          <div
+            class="news-category-badge"
+            [class]="'category-' + getCategoryColor(news.category)">
+            {{ getCategoryText(news.category) }}
+          </div>
+        </div>
+
+        <div class="news-card-content">
+          <div class="news-meta">
+            <span class="news-date">{{ formatDate(news.date) }}</span>
+            <span class="news-read-time">{{ news.readTime }}</span>
+          </div>
+
+          <h3 class="news-title">{{ news.title }}</h3>
+          <p class="news-excerpt">{{ news.excerpt }}</p>
+
+          <div class="news-footer">
+            <span class="news-author">{{ news.author }}</span>
+          </div>
+
+          <!-- Expanded Content -->
+          <div
+            class="news-content"
+            [class.show-content]="selectedNews?.id === news.id">
+            <p class="news-full-content">{{ news.content }}</p>
+
+            <div class="news-tags">
+              <span
+                *ngFor="let tag of news.tags"
+                class="news-tag">
+                #{{ tag }}
+              </span>
+            </div>
+
+            <div class="news-actions">
+              <button class="share-btn">
+                <span class="btn-icon"><i class="fas fa-paper-plane"></i></span>
+                Partilhar
+              </button>
+              <button class="read-btn">
+                <span class="btn-icon"><i class="fas fa-book-open"></i></span>
+                Ler Mais
+              </button>
+            </div>
+          </div>
+
+          <!-- Read More Indicator -->
+          <div class="read-more">
+            <span class="read-more-text">
+              {{ selectedNews?.id === news.id ? 'Ver menos' : 'Ler mais' }}
+            </span>
+            <span
+              class="read-more-arrow"
+              [class.arrow-up]="selectedNews?.id === news.id">
+              ↓
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load More Button -->
+    <div class="news-actions" *ngIf="!showAllNews && filteredNews.length >= 4">
+      <button class="load-more-btn" (click)="toggleShowAll()">
+        <span class="btn-icon"><i class="fas fa-newspaper"></i></span>
+        Carregar Mais Notícias
+      </button>
+    </div>
+
+  <!-- CTA Section -->
+<div class="projects-cta">
+  <div class="cta-content">
+    <div class="cta-text">
+      <h3 class="cta-title">Os Nossos Parceiros</h3>
+      <p class="cta-description">
+        Colabore connosco para desenvolver iniciativas que <br> transformem
+        a agricultura angolana e criem impacto real nas comunidades rurais.
+      </p>
+
+      <!-- Parceiros -->
+      <div #partners class="cta-partners">
+        <div class="partner-card from-left">
+          <img src="assets/hero/transferirfada.jpg" alt="Parceiro 1" />
+          <span class="font-bold">Fundo de Apoio Desenvolvimento Agrário</span>
+        </div>
+
+        <div class="partner-card from-left">
+          <img src="assets/hero/transferir.png" alt="Parceiro 2" />
+          <span class="fonte">Ministério da Agricultura e Pecuária</span>
+        </div>
+
+        <div class="partner-card from-right">
+          <img src="assets/hero/transferirbm.jpg" alt="Parceiro 3" />
+          <span class="fonte">Banco Mundial</span>
+        </div>
+
+        <div class="partner-card from-right">
+          <img src="assets/hero/transferir11.jpg" alt="Parceiro 4" />
+          <span class="fonte">Projeto de Desenvolvimento Agrícola</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+  </div>
+</section>

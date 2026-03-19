@@ -1,0 +1,447 @@
+<!-- Hero Section -->
+<section class="organigram-hero">
+  <div class="hero-background">
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">Organigrama</h1>
+      <p class="hero-subtitle">Estrutura organizacional do Instituto de Desenvolvimento Agrário</p>
+    </div>
+  </div>
+</section>
+
+<!-- Breadcrumb -->
+<section class="breadcrumb-section">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a routerLink="/" class="breadcrumb-item">Início</a>
+      <span class="breadcrumb-separator">/</span>
+      <a routerLink="/sobre-ida" class="breadcrumb-itemS">Sobre o IDA</a>
+      <span class="breadcrumb-separator">/</span>
+      <span class="breadcrumb-item active">Organigrama</span>
+    </nav>
+  </div>
+</section>
+
+<!-- Organigram Content -->
+<section class="organigram-content">
+  <div class="container">
+
+    <!-- Controls -->
+    <div class="organigram-controls">
+      <div class="controls-left">
+        <button class="control-btn active" data-view="hierarchical">
+          <i class="icon icon-hierarchy"></i>
+          Vista Hierárquica
+        </button>
+        <button class="control-btn" data-view="departmental">
+          <i class="icon icon-departments"></i>
+          Vista por Departamentos
+        </button>
+      </div>
+      <div class="controls-right">
+        <button class="control-btn" id="zoomIn">
+          <i class="icon icon-zoom-in"></i>
+          Ampliar
+        </button>
+        <button class="control-btn" id="zoomOut">
+          <i class="icon icon-zoom-out"></i>
+          Reduzir
+        </button>
+        <button class="control-btn" id="resetView">
+          <i class="icon icon-reset"></i>
+          Resetar
+        </button>
+        <a href="/assets/documents/organigrama-ida.pdf" class="control-btn primary" download>
+          <i class="icon icon-download"></i>
+          Download PDF
+        </a>
+      </div>
+    </div>
+
+    <!-- Organigram Container -->
+    <div class="organigram-container">
+
+      <!-- Hierarchical View -->
+      <div class="organigram-view active" id="hierarchicalView">
+
+        <!-- Level 1: Presidency -->
+        <div class="org-level level-1">
+          <div class="org-node president">
+            <div class="node-content">
+              <div class="node-avatar">
+                <img src="../../../assets/img/bg-img/CC.jpg" alt="Presidente" class="avatar-img">
+              </div>
+              <div class="node-info">
+                <h3 class="node-title">Presidente do Conselho de Administração</h3>
+                <p class="node-name">Eng.º João Baptista</p>
+                <p class="node-department">Direcção Executiva</p>
+              </div>
+              <div class="node-actions">
+                <button class="action-btn" title="Ver perfil">
+                  <i class="icon icon-profile"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Connector -->
+        <div class="level-connector">
+          <div class="connector-line"></div>
+        </div>
+
+        <!-- Level 2: Administration Council -->
+        <div class="org-level level-2">
+          <div class="org-node council">
+            <div class="node-content">
+              <div class="node-icon"><i class="fas fa-users"></i></div>
+              <div class="node-info">
+                <h3 class="node-title">Conselho de Administração</h3>
+                <p class="node-members">5 Membros</p>
+                <p class="node-role">Órgão Colegial</p>
+              </div>
+              <button class="toggle-btn" data-target="council-members">
+                <i class="icon icon-chevron"></i>
+              </button>
+            </div>
+
+            <!-- Council Members -->
+            <div class="org-sublevel" id="council-members">
+              <div class="sublevel-grid">
+                <div class="org-node member">
+                  <div class="node-content">
+                    <div class="node-avatar">
+                      <img src="/assets/images/avatar-vice.jpg" alt="Vice-Presidente" class="avatar-img">
+                    </div>
+                    <div class="node-info">
+                      <h4 class="node-title">Vice-Presidente</h4>
+                      <p class="node-name">Dra. Maria Fernandes</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="org-node member">
+                  <div class="node-content">
+                    <div class="node-avatar">
+                      <div class="avatar-placeholder">AD</div>
+                    </div>
+                    <div class="node-info">
+                      <h4 class="node-title">Administrador</h4>
+                      <p class="node-name">Dr. António Dias</p>
+                    </div>
+                  </div>
+                </div>
+                <!-- More members... -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Level 3: National Directions -->
+        <div class="org-level level-3">
+          <div class="org-grid">
+
+            <!-- Technical Direction -->
+            <div class="org-node direction">
+              <div class="node-content">
+                <div class="node-icon"><i class="fas fa-wrench"></i></div>
+                <div class="node-info">
+                  <h3 class="node-title">Direcção Nacional Técnica</h3>
+                  <p class="node-director">Eng.º Carlos Silva</p>
+                  <p class="node-stats">45 colaboradores</p>
+                </div>
+                <button class="toggle-btn" data-target="technical-departments">
+                  <i class="icon icon-chevron"></i>
+                </button>
+              </div>
+
+              <!-- Technical Departments -->
+              <div class="org-sublevel" id="technical-departments">
+                <div class="department-list">
+                  <div class="org-node department">
+                    <div class="node-content">
+                      <div class="node-icon"><i class="fas fa-seedling"></i></div>
+                      <div class="node-info">
+                        <h4 class="node-title">Departamento de Produção Vegetal</h4>
+                        <p class="node-manager">Eng.ª Sofia Mendes</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="org-node department">
+                    <div class="node-content">
+                      <div class="node-icon"><i class="fas fa-cow"></i></div>
+                      <div class="node-info">
+                        <h4 class="node-title">Departamento de Produção Animal</h4>
+                        <p class="node-manager">Dr. Miguel Santos</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="org-node department">
+                    <div class="node-content">
+                      <div class="node-icon"><i class="fas fa-tint"></i></div>
+                      <div class="node-info">
+                        <h4 class="node-title">Departamento de Irrigação</h4>
+                        <p class="node-manager">Eng.º Paulo Costa</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Financial Direction -->
+            <div class="org-node direction">
+              <div class="node-content">
+                <div class="node-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <div class="node-info">
+                  <h3 class="node-title">Direcção Nacional Financeira</h3>
+                  <p class="node-director">Dra. Ana Rodrigues</p>
+                  <p class="node-stats">28 colaboradores</p>
+                </div>
+                <button class="toggle-btn" data-target="financial-departments">
+                  <i class="icon icon-chevron"></i>
+                </button>
+              </div>
+
+              <!-- Financial Departments -->
+              <div class="org-sublevel" id="financial-departments">
+                <div class="department-list">
+                  <div class="org-node department">
+                    <div class="node-content">
+                      <div class="node-icon"><i class="fas fa-chart-bar"></i></div>
+                      <div class="node-info">
+                        <h4 class="node-title">Departamento de Contabilidade</h4>
+                        <p class="node-manager">Dr. Rui Oliveira</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="org-node department">
+                    <div class="node-content">
+                      <div class="node-icon"><i class="fas fa-credit-card"></i></div>
+                      <div class="node-info">
+                        <h4 class="node-title">Departamento de Crédito</h4>
+                        <p class="node-manager">Dra. Carla Machado</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- More directions... -->
+
+          </div>
+        </div>
+
+        <!-- Level 4: Provincial Delegations -->
+        <div class="org-level level-4">
+          <div class="org-grid provincial-grid">
+
+            <div class="org-node province">
+              <div class="node-content">
+                <div class="node-icon"><i class="fas fa-city"></i></div>
+                <div class="node-info">
+                  <h3 class="node-title">Delegação de Luanda</h3>
+                  <p class="node-director">Eng.º Pedro Almeida</p>
+                  <p class="node-stats">15 colaboradores</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="org-node province">
+              <div class="node-content">
+                <div class="node-icon"><i class="fas fa-mountain"></i></div>
+                <div class="node-info">
+                  <h3 class="node-title">Delegação do Huambo</h3>
+                  <p class="node-director">Eng.ª Teresa Silva</p>
+                  <p class="node-stats">12 colaboradores</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- More provinces... -->
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Departmental View -->
+      <div class="organigram-view" id="departmentalView">
+        <div class="departmental-grid">
+
+          <div class="department-card">
+            <div class="card-header technical">
+              <div class="card-icon"><i class="fas fa-wrench"></i></div>
+              <h3>Área Técnica</h3>
+            </div>
+            <div class="card-content">
+              <div class="card-stats">
+                <span class="stat">4 Departamentos</span>
+                <span class="stat">45 Colaboradores</span>
+              </div>
+              <ul class="card-list">
+                <li>Produção Vegetal</li>
+                <li>Produção Animal</li>
+                <li>Irrigação</li>
+                <li>Mecanização Agrícola</li>
+              </ul>
+              <a routerLink="/departamento-tecnico" class="card-link">Ver detalhes →</a>
+            </div>
+          </div>
+
+          <div class="department-card">
+            <div class="card-header financial">
+              <div class="card-icon"><i class="fas fa-money-bill-wave"></i></div>
+              <h3>Área Financeira</h3>
+            </div>
+            <div class="card-content">
+              <div class="card-stats">
+                <span class="stat">3 Departamentos</span>
+                <span class="stat">28 Colaboradores</span>
+              </div>
+              <ul class="card-list">
+                <li>Contabilidade</li>
+                <li>Crédito Agrícola</li>
+                <li>Orçamento</li>
+              </ul>
+              <a routerLink="/departamento-financeiro" class="card-link">Ver detalhes →</a>
+            </div>
+          </div>
+
+          <!-- More department cards... -->
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Leadership Section -->
+<section class="leadership-section">
+  <div class="container">
+
+    <div class="section-header">
+      <h2 class="section-title">Órgãos de Direção</h2>
+      <p class="section-subtitle">
+        Equipa responsável pela liderança e gestão estratégica do Instituto.
+      </p>
+    </div>
+
+    <div class="leadership-grid">
+
+      <!-- Presidente -->
+      <div class="leader-card">
+        <div class="leader-image">
+          <img src="../../../assets/img/bg-img/CC.jpg" alt="Presidente">
+        </div>
+        <div class="leader-info">
+          <h3>Eng.º João Baptista</h3>
+          <p class="leader-role">Presidente do Conselho de Administração</p>
+        </div>
+      </div>
+
+      <!-- Vice-Presidente -->
+      <div class="leader-card">
+        <div class="leader-image">
+          <img src="/../../../assets/img/bg-img/vice-presidente (1).png"alt="Vice-Presidente">
+        </div>
+        <div class="leader-info">
+          <h3>Dra. Maria Fernandes</h3>
+          <p class="leader-role">Vice-Presidente</p>
+        </div>
+      </div>
+
+      <!-- Administrador Executivo -->
+      <div class="leader-card">
+        <div class="leader-image">
+          <img src="/../../../assets/img/bg-img/JC.jpg" alt="Administrador">
+        </div>
+        <div class="leader-info">
+          <h3>Dr. António Dias</h3>
+          <p class="leader-role">Administrador Executivo</p>
+        </div>
+      </div>
+
+      <!-- Administrador -->
+      <div class="leader-card">
+        <div class="leader-image">
+          <img src="/../../../assets/img/bg-img/vice-presidente (1).png" alt="Administrador">
+        </div>
+        <div class="leader-info">
+          <h3>Dra. Carla Mendes</h3>
+          <p class="leader-role">Administradora</p>
+        </div>
+      </div>
+
+      <!-- Director Técnico -->
+      <div class="leader-card">
+        <div class="leader-image">
+          <img src="/../../../assets/img/bg-img/dir-tecnico.png" alt="Director Técnico">
+        </div>
+        <div class="leader-info">
+          <h3>Eng.º Carlos Silva</h3>
+          <p class="leader-role">Director Nacional Técnico</p>
+        </div>
+      </div>
+
+      <!-- Director Financeiro -->
+      <div class="leader-card">
+        <div class="leader-image">
+          <img src="/../../../assets/img/bg-img/dir-financeiro (2).png" alt="Director Financeiro">
+        </div>
+        <div class="leader-info">
+          <h3>Dra. Ana Rodrigues</h3>
+          <p class="leader-role">Directora Nacional Financeira</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+    <!-- Statistics -->
+    <div class="organigram-stats">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">18</div>
+          <div class="stat-label">Províncias</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">164</div>
+          <div class="stat-label">Municípios</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">850+</div>
+          <div class="stat-label">Colaboradores</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">12</div>
+          <div class="stat-label">Departamentos</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section class="organigram-contact">
+  <div class="container">
+    <div class="contact-content">
+      <h2>Precisa de mais informações?</h2>
+      <p>Entre em contacto com o nosso departamento de recursos humanos para esclarecimentos sobre a estrutura organizacional.</p>
+      <div class="contact-actions">
+        <a href="mailto:rh@ida.gov.ao" class="contact-btn primary">
+          <i class="icon icon-email"></i>
+          rhida.gov.ao
+        </a>
+        <a href="tel:+244222333444" class="contact-btn secondary">
+          <i class="icon icon-phone"></i>
+          +244 223 533 000
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

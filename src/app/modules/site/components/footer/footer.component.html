@@ -1,0 +1,79 @@
+<footer class="footer">
+  <div class="footer-main">
+    <!-- GRID PRINCIPAL -->
+    <div class="container">
+      <div class="footer-grid">
+
+        <!-- COLUNA 1: LOGO + DESCRIÇÃO + REDES -->
+        <div class="footer-column">
+          <img [src]="footerData.logo.src" [alt]="footerData.logo.alt" class="logo-img">
+          <div class="logo-text mt-2">{{ footerData.logo.text }}</div>
+          <p class="footer-description">{{ footerData.description }}</p>
+
+          <div class="social-icons">
+            <a *ngFor="let social of footerData.socialMedia"
+               [href]="social.link"
+               class="social-circle"
+               [attr.aria-label]="social.name"
+               target="_blank" rel="noopener noreferrer">
+              <i [class]="social.icon"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- COLUNA 2: SOBRE NÓS -->
+        <div class="footer-column">
+          <h4 class="footer-title">Sobre Nós</h4>
+          <ul class="footer-list">
+            <li *ngFor="let link of footerData.quickLinks">
+              <span class="arrow">›</span>
+              <a [href]="link.link">{{ link.name }}</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- COLUNA 3: PRODUTOS / PROGRAMAS -->
+        <div class="footer-column">
+          <h4 class="footer-title">Produtos</h4>
+          <ul class="footer-list">
+            <li *ngFor="let program of footerData.programs">
+              <span class="arrow">›</span>
+              <a [href]="program.link">{{ program.name }}</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- COLUNA 4: CONTACTOS -->
+        <div class="footer-column">
+          <h4 class="footer-title">Contactos</h4>
+          <div class="contact-line">
+        <span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span>
+            {{ footerData.contact.address }}
+          </div>
+          <div class="contact-line">
+            <span class="contact-icon"><i class="fas fa-phone"></i></span>
+            {{ footerData.contact.phone }}
+          </div>
+          <div class="contact-line">
+            <span class="contact-icon"><i class="fas fa-envelope"></i></span>
+            {{ footerData.contact.email }}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- LINHA HORIZONTAL FULL-WIDTH -->
+    <hr class="footer-separator">
+
+    <!-- RODAPÉ INFERIOR FULL-WIDTH -->
+    <div class="footer-bottom">
+      <div class="footer-copy">
+       Copyright © {{ currentYear }} IDA - Instituto de Desenvolvimento Agrário
+      </div>
+      <div class="footer-developed">
+        Desenvolvido pelo IDA
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,288 @@
+<!-- Hero Section -->
+<section class="partners-hero">
+  <div class="hero-background">
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">{{ pageData.hero.title }}</h1>
+      <p class="hero-subtitle">{{ pageData.hero.subtitle }}</p>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="partners-stats">
+  <div class="container">
+    <h2 class="stats-title">{{ pageData.stats.title }}</h2>
+    <div class="stats-grid">
+      <div *ngFor="let stat of pageData.stats.items" class="stat-card">
+        <div class="stat-number">{{ stat.number }}</div>
+        <div class="stat-label">{{ stat.label }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Search and Filters Section -->
+<section class="filters-section">
+  <div class="container">
+    <div class="filters-container">
+
+      <!-- Search Bar -->
+      <div class="search-box">
+        <div class="search-icon"><i class="fas fa-magnifying-glass"></i></div>
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Pesquisar parceiros..."
+          class="search-input">
+        <button class="search-btn" (click)="clearFilters()">Limpar</button>
+      </div>
+
+      <!-- Filters Row -->
+      <div class="filters-row">
+
+        <!-- Type Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Tipo de Parceiro</label>
+          <select [(ngModel)]="selectedType" class="filter-select">
+            <option *ngFor="let type of partnerTypes" [value]="type.value">
+               {{ type.label }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Focus Area Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Área de Foco</label>
+          <select [(ngModel)]="selectedFocus" class="filter-select">
+            <option *ngFor="let area of focusAreas" [value]="area.value">
+              {{ area.label }}
+            </option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Active Filters -->
+      <div class="active-filters" *ngIf="selectedType !== 'all' || selectedFocus !== 'all'">
+        <span class="filters-label">Filtros activos:</span>
+
+        <span *ngIf="selectedType !== 'all'" class="filter-tag">
+          {{ getPartnerTypeInfo(selectedType).icon }} {{ getPartnerTypeInfo(selectedType).label }}
+          <button (click)="selectedType = 'all'">×</button>
+        </span>
+
+        <span *ngIf="selectedFocus !== 'all'" class="filter-tag">
+          <i class="fas fa-bullseye"></i> {{ selectedFocus }}
+          <button (click)="selectedFocus = 'all'">×</button>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Partners Grid Section -->
+<section class="partners-grid-section">
+  <div class="container">
+
+    <!-- Results Header -->
+    <div class="results-header">
+      <h2 class="results-title">
+        {{ filteredPartners.length }} Parceiro{{ filteredPartners.length !== 1 ? 's' : '' }} Encontrado{{ filteredPartners.length !== 1 ? 's' : '' }}
+      </h2>
+    </div>
+
+    <!-- Partners Grid -->
+    <div class="partners-grid">
+      <div
+        *ngFor="let partner of filteredPartners"
+        class="partner-card"
+        (click)="openPartnerModal(partner)">
+
+        <!-- Partner Logo -->
+        <div class="partner-logo">
+          <img [src]="partner.logo" [alt]="partner.name" class="logo-img">
+         <!-- <div class="partner-type" [class]="'type-' + getPartnerTypeInfo(partner.type).color">
+            {{ getPartnerTypeInfo(partner.type).icon }}
+          </div> -->
+        </div>
+
+        <!-- Partner Content -->
+        <div class="partner-content">
+
+          <!-- Name -->
+          <h3 class="partner-name">{{ partner.name }}</h3>
+
+          <!-- Description -->
+          <p class="partner-description">{{ partner.description }}</p>
+
+          <!-- Focus Areas -->
+          <div class="focus-areas">
+            <span class="focus-label">Áreas de Actuação:</span>
+            <div class="focus-tags">
+              <span *ngFor="let area of partner.focusAreas.slice(0, 2)" class="focus-tag">
+                {{ area }}
+              </span>
+              <span *ngIf="partner.focusAreas.length > 2" class="more-focus">
+                +{{ partner.focusAreas.length - 2 }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Partnership Info -->
+          <div class="partnership-info">
+            <div class="info-item">
+              <span class="info-icon"><i class="fas fa-handshake"></i></span>
+              <span class="info-text">Parceiro desde {{ partner.since }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-icon"><i class="fas fa-rocket"></i></span>
+              <span class="info-text">{{ partner.projects.length }} projectos</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- No Results -->
+    <div *ngIf="filteredPartners.length === 0" class="no-results">
+      <div class="no-results-icon"><i class="fas fa-magnifying-glass"></i></div>
+      <h3>Nenhum parceiro encontrado</h3>
+      <p>Tente ajustar os filtros ou termos de pesquisa</p>
+      <button class="clear-filters-btn" (click)="clearFilters()">
+        Limpar Todos os Filtros
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="partners-cta">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="cta-title">Interessado em Parceria?</h2>
+      <p class="cta-description">
+        Junte-se à nossa rede de parceiros e contribua para o desenvolvimento
+        sustentável do sector agrário angolano.
+      </p>
+      <div class="cta-actions">
+        <a href="/tornar-parceiro" class="cta-btn primary">
+          <i class="fas fa-handshake"></i> Tornar-se Parceiro
+        </a>
+        <a href="/contactos" class="cta-btn secondary">
+          <i class="fas fa-phone"></i> Falar com a Equipa
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Partner Modal -->
+<div *ngIf="selectedPartner" class="modal-overlay" (click)="closePartnerModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <div class="modal-title-section">
+        <div class="partner-logo-large">
+          <img [src]="selectedPartner.logo" [alt]="selectedPartner.name" class="logo-img-large">
+        </div>
+        <div>
+          <h2 class="modal-title">{{ selectedPartner.name }}</h2>
+          <div class="modal-subtitle">
+            <span class="type-badge" [class]="'type-' + getPartnerTypeInfo(selectedPartner.type).color">
+              <i [class]=" getPartnerTypeInfo(selectedPartner.type).icon "></i>
+              {{ getPartnerTypeInfo(selectedPartner.type).label }}
+            </span>
+            <span class="partnership-years">
+              <i class="fas fa-handshake"></i> Parceiro desde {{ selectedPartner.since }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <button class="modal-close" (click)="closePartnerModal()">×</button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+
+      <!-- Partner Details -->
+      <div class="partner-details">
+
+        <!-- Description -->
+        <div class="detail-section">
+          <h3>Sobre o Parceiro</h3>
+          <p class="partner-full-description">{{ selectedPartner.description }}</p>
+        </div>
+
+        <!-- Key Information -->
+        <div class="detail-section">
+          <h3>Informações de Contacto</h3>
+          <div class="contact-grid">
+            <div class="contact-item">
+              <span class="contact-icon"><i class="fas fa-globe"></i> </span>
+              <a [href]="selectedPartner.website" target="_blank" class="contact-link">
+                {{ selectedPartner.website }}
+              </a>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon"><i class="fas fa-envelope"></i></span>
+              <a [href]="'mailto:' + selectedPartner.contact.email" class="contact-link">
+                {{ selectedPartner.contact.email }}
+              </a>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon"><i class="fas fa-phone"></i></span>
+              <a [href]="'tel:' + selectedPartner.contact.phone" class="contact-link">
+                {{ selectedPartner.contact.phone }}
+              </a>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span>
+              <span class="contact-text">{{ selectedPartner.contact.address }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Focus Areas -->
+        <div class="detail-section">
+          <h3>Áreas de Foco</h3>
+          <div class="focus-areas-detailed">
+            <span *ngFor="let area of selectedPartner.focusAreas" class="focus-tag-detailed">
+              {{ area }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Projects -->
+        <div class="detail-section">
+          <h3>Projectos em Conjunto</h3>
+          <ul class="projects-list">
+            <li *ngFor="let project of selectedPartner.projects">{{ project }}</li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button class="btn secondary" (click)="closePartnerModal()">Fechar</button>
+      <a [href]="selectedPartner.website" target="_blank" class="btn primary">
+        <i class="fas fa-globe"></i> Visitar Website
+      </a>
+      <a [href]="'/parceiro/' + selectedPartner.id" class="btn outline">
+        <i class="fas fa-file-alt"></i> Ver Detalhes Completos
+      </a>
+    </div>
+
+  </div>
+</div>

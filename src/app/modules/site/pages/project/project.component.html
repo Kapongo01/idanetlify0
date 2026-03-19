@@ -1,0 +1,350 @@
+<!-- Hero Section -->
+<section class="projects-hero">
+  <div class="hero-background">
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">{{ pageData.hero.title }}</h1>
+      <p class="hero-subtitle">{{ pageData.hero.subtitle }}</p>
+
+      <!-- Quick Stats -->
+      <div class="hero-stats">
+        <div *ngFor="let stat of pageData.stats.items" class="stat-item">
+          <div class="stat-number">{{ stat.number }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Search and Filters Section -->
+<section class="filters-section">
+  <div class="container">
+    <div class="filters-container">
+
+      <!-- Search Bar -->
+      <div class="search-box">
+        <div class="search-icon"><i class="fas fa-magnifying-glass"></i></div>
+        <input type="text" [(ngModel)]="searchTerm" placeholder="Pesquisar projectos..." class="search-input">
+        <button class="search-btn" (click)="clearFilters()">Limpar</button>
+      </div>
+
+      <!-- Filters Row -->
+      <div class="filters-row">
+
+        <!-- Category Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Categoria</label>
+          <select [(ngModel)]="selectedCategory" class="filter-select">
+            <option *ngFor="let cat of categories" [value]="cat.value">
+              {{ cat.label }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Estado</label>
+          <select [(ngModel)]="selectedStatus" class="filter-select">
+            <option *ngFor="let status of statuses" [value]="status.value">
+             <i [class]="status.icon"></i> {{ status.label }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Location Filter -->
+        <div class="filter-group">
+          <label class="filter-label">Localização</label>
+          <select [(ngModel)]="selectedLocation" class="filter-select">
+            <option *ngFor="let location of locations" [value]="location.value">
+              {{ location.label }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Sort Options -->
+        <div class="filter-group">
+          <label class="filter-label">Ordenar por</label>
+          <select [(ngModel)]="sortBy" class="filter-select">
+            <option *ngFor="let option of sortOptions" [value]="option.value">
+              {{ option.label }}
+            </option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Active Filters -->
+      <div class="active-filters"
+        *ngIf="selectedCategory !== 'all' || selectedStatus !== 'all' || selectedLocation !== 'all'">
+        <span class="filters-label">Filtros activos:</span>
+
+        <span *ngIf="selectedCategory !== 'all'" class="filter-tag">
+          {{ getCategoryInfo(selectedCategory).icon }} {{ getCategoryInfo(selectedCategory).label }}
+          <button (click)="selectedCategory = 'all'">×</button>
+        </span>
+
+
+        <span *ngIf="selectedStatus !== 'all'" class="filter-tag">
+          {{ getStatusInfo(selectedStatus).icon }} {{ getStatusInfo(selectedStatus).label }}
+          <button (click)="selectedStatus = 'all'">×</button>
+        </span>
+
+
+        <span *ngIf="selectedLocation !== 'all'" class="filter-tag">
+          <i class="fas fa-map-marker-alt"></i> {{ selectedLocation }}
+          <button (click)="selectedLocation = 'all'">×</button>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Projects Grid Section -->
+<section class="projects-grid-section">
+  <div class="container">
+
+    <!-- Results Header -->
+    <div class="results-header">
+      <h2 class="results-title">
+        {{ filteredProjects.length }} Projecto{{ filteredProjects.length !== 1 ? 's' : '' }} Encontrado{{
+        filteredProjects.length !== 1 ? 's' : '' }}
+      </h2>
+      <div class="results-actions">
+        <button class="export-btn">
+          <i class="fas fa-chart-bar"></i> Exportar Lista
+        </button>
+      </div>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="projects-grid">
+      <div *ngFor="let project of filteredProjects" class="project-card" (click)="openProjectModal(project)">
+
+        <!-- Project Image -->
+        <div class="project-image">
+          <img [src]="project.image" [alt]="project.title" class="project-img">
+          <div class="project-overlay"></div>
+
+          <!-- Status Badge -->
+          <div class="status-badge" [class]="'status-' + getStatusInfo(project.status).color">
+            <i [class]="'fas ' + getStatusInfo(project.status).icon"></i>
+            {{ getStatusInfo(project.status).label }}
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="progress-bar" *ngIf="project.status === 'active'">
+            <div class="progress-fill" [style.width.%]="project.progress"></div>
+            <span class="progress-text">{{ project.progress }}%</span>
+          </div>
+        </div>
+
+        <!-- Project Content -->
+        <div class="project-content">
+
+          <!-- Category -->
+          <div class="project-category">
+            <span class="category-icon"><i [class]="'fas ' + getCategoryInfo(project.category).icon"></i></span>
+            {{ getCategoryInfo(project.category).label }}
+          </div>
+
+          <!-- Title -->
+          <h3 class="project-title">{{ project.title }}</h3>
+
+          <!-- Description -->
+          <p class="project-description">{{ project.description }}</p>
+
+          <!-- Project Meta -->
+          <div class="project-meta">
+            <div class="meta-item">
+              <span class="meta-icon"><i class="fas fa-map-marker-alt"></i></span>
+              <span class="meta-text">{{ project.location }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-icon"><i class="fas fa-users"></i></span>
+              <span class="meta-text">{{ project.beneficiaries }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-icon"><i class="fas fa-money-bill-wave"></i></span>
+              <span class="meta-text">{{ project.budget }}</span>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="project-timeline">
+            <div class="timeline-item">
+              <span class="timeline-label">Início</span>
+              <span class="timeline-date">{{ project.startDate | date:'MMM y' }}</span>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-label">Conclusão</span>
+              <span class="timeline-date">{{ project.endDate | date:'MMM y' }}</span>
+            </div>
+          </div>
+
+          <!-- View Details -->
+          <div class="project-actions">
+            <button class="view-details-btn">
+              Ver Detalhes →
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- No Results -->
+    <div *ngIf="filteredProjects.length === 0" class="no-results">
+      <div class="no-results-icon">fas fa-magnifying-glass</div>
+      <h3>Nenhum projecto encontrado</h3>
+      <p>Tente ajustar os filtros ou termos de pesquisa</p>
+      <button class="clear-filters-btn" (click)="clearFilters()">
+        Limpar Todos os Filtros
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="projects-cta">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="cta-title">Tem um Projecto em Mente?</h2>
+      <p class="cta-description">
+        Colabore connosco para desenvolver iniciativas que transformem
+        a agricultura angolana e criem impacto real nas comunidades rurais.
+      </p>
+      <div class="cta-actions">
+        <a href="/propor-projecto" class="cta-btn primary">
+          <i class="fas fa-lightbulb"></i> Propor um Projecto
+        </a>
+        <a href="/contactos" class="cta-btn secondary">
+          <i class="fas fa-phone"></i> Falar com a Equipa
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Project Modal -->
+<div *ngIf="selectedProject" class="modal-overlay" (click)="closeProjectModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">{{ selectedProject.title }}</h2>
+      <button class="modal-close" (click)="closeProjectModal()">×</button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+
+      <!-- Project Gallery -->
+      <div class="modal-gallery">
+        <img [src]="selectedProject.image" [alt]="selectedProject.title" class="main-image">
+        <div class="gallery-thumbnails" *ngIf="selectedProject.gallery.length > 0">
+          <img *ngFor="let img of selectedProject.gallery" [src]="img" class="thumbnail">
+        </div>
+      </div>
+
+      <!-- Project Details -->
+      <div class="modal-details">
+
+        <!-- Status and Progress -->
+        <div class="detail-section">
+          <div class="detail-row">
+            <div class="detail-item">
+              <span class="detail-label">Estado</span>
+              <span class="detail-value status-badge" [class]="'status-' + getStatusInfo(selectedProject.status).color">
+                {{ getStatusInfo(selectedProject.status).icon }}
+                {{ getStatusInfo(selectedProject.status).label }}
+              </span>
+            </div>
+            <div class="detail-item" *ngIf="selectedProject.status === 'active'">
+              <span class="detail-label">Progresso</span>
+              <div class="progress-container">
+                <div class="progress-bar">
+                  <div class="progress-fill" [style.width.%]="selectedProject.progress"></div>
+                </div>
+                <span class="progress-text">{{ selectedProject.progress }}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Basic Info -->
+        <div class="detail-section">
+          <h4>Informações do Projecto</h4>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label"><i class="fas fa-map-marker-alt"></i> Localização</span>
+              <span class="detail-value">{{ selectedProject.location }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label"><i class="fas fa-users"></i> Beneficiários</span>
+              <span class="detail-value">{{ selectedProject.beneficiaries }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label"><i class="fas fa-money-bill-wave"></i> Orçamento</span>
+              <span class="detail-value">{{ selectedProject.budget }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label"><i class="fas fa-calendar-day"></i> Período</span>
+              <span class="detail-value">
+                {{ selectedProject.startDate | date:'MMM y' }} - {{ selectedProject.endDate | date:'MMM y' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="detail-section">
+          <h4>Descrição</h4>
+          <p class="project-full-description">{{ selectedProject.fullDescription }}</p>
+        </div>
+
+        <!-- Objectives -->
+        <div class="detail-section">
+          <h4>Objectivos</h4>
+          <ul class="objectives-list">
+            <li *ngFor="let objective of selectedProject.objectives">{{ objective }}</li>
+          </ul>
+        </div>
+
+        <!-- Results -->
+        <div *ngIf="selectedProject.results.length > 0" class="detail-section">
+          <h4>Resultados Alcançados</h4>
+          <ul class="results-list">
+            <li *ngFor="let result of selectedProject.results">{{ result }}</li>
+          </ul>
+        </div>
+
+        <!-- Partners -->
+        <div *ngIf="selectedProject.partners.length > 0" class="detail-section">
+          <h4>Parceiros</h4>
+          <div class="partners-list">
+            <span *ngFor="let partner of selectedProject.partners" class="partner-tag">
+              {{ partner }}
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button class="btn secondary" (click)="closeProjectModal()">Fechar</button>
+      <a [href]="'/projecto/' + selectedProject.id" class="btn primary">
+       <i class="fas fa-file-alt"></i> Ver Relatório Completo
+      </a>
+    </div>
+
+  </div>
+</div>

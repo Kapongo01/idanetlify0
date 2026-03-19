@@ -1,0 +1,65 @@
+<!-- Hero Principal com Carrossel -->
+<section class="hero-section">
+  <div class="hero-carousel">
+    
+    <!-- Slides usando *ngFor -->
+    <div *ngFor="let slide of slides; let i = index" 
+         class="carousel-slide" 
+         [class.active]="i === currentSlideIndex">
+      
+      <div class="slide-image" [ngStyle]="getSlideBackground(i)">
+
+        <div class="image-overlay"></div>
+        <div class="container">
+          <div class="slide-content">
+            <h1 class="hero-title">
+              {{slide.title}}
+              <span class="hero-subtitle">{{slide.subtitle}}</span>
+            </h1>
+            
+            <p class="hero-description">
+              {{slide.description}}
+            </p>
+            
+            <div class="hero-buttons">
+              <a [routerLink]="slide.primaryBtn.link" class="btn btn-primary">
+                {{slide.primaryBtn.text}}
+              </a>
+              <a [routerLink]="slide.secondaryBtn.link" class="btn btn-secondary">
+                {{slide.secondaryBtn.text}}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Controles do Carrossel -->
+    <div class="carousel-controls">
+      <button class="control-btn prev-btn" (click)="prevSlide()">
+        <span class="control-icon">‹</span>
+      </button>
+      
+      <div class="indicators-container">
+        <button *ngFor="let slide of slides; let i = index" 
+                class="indicator" 
+                [class.active]="i === currentSlideIndex"
+                (click)="goToSlide(i)">
+        </button>
+      </div>
+      
+      <button class="control-btn next-btn" (click)="nextSlide()">
+        <span class="control-icon">›</span>
+      </button>
+    </div>
+    
+    <!-- Controles de Play/Pause -->
+    <div class="play-controls">
+      <button class="play-btn" (click)="toggleAutoplay()">
+        <span class="play-icon" *ngIf="!autoplayActive">▶</span>
+        <span class="pause-icon" *ngIf="autoplayActive">❚❚</span>
+      </button>
+    </div>
+    
+  </div>
+</section>
